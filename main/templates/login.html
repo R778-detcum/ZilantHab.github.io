@@ -22,17 +22,19 @@
                 <form method="POST">
                     {% csrf_token %}
                     <div class="mb-3">
-                        <label for="username" class="form-label text-white">Имя пользователя</label>
-                        <input type="text" class="form-control bg-dark text-white border-warning" id="username" name="username" required>
+                        <label for="username" class="form-label text-dark fw-semibold">Имя пользователя</label>
+                        <input type="text" class="form-control bg-light text-dark border-secondary" id="username" name="username" required>
+                        <small class="form-text text-muted">Введите имя, которое указали при регистрации</small>
                     </div>
                     <div class="mb-3">
-                        <label for="password" class="form-label text-white">Пароль</label>
-                        <input type="password" class="form-control bg-dark text-white border-warning" id="password" name="password" required>
+                        <label for="password" class="form-label text-dark fw-semibold">Пароль</label>
+                        <input type="password" class="form-control bg-light text-dark border-secondary" id="password" name="password" required>
+                        <small class="form-text text-muted">Пароль должен содержать не менее 8 символов</small>
                     </div>
                     <button type="submit" class="btn-primary-custom w-100">Войти</button>
                 </form>
 
-                <p class="text-center text-white-50 mt-3">
+                <p class="text-center text-dark-50 mt-3">
                     Нет аккаунта? <a href="{% url 'register' %}" class="text-warning">Зарегистрироваться</a>
                 </p>
             </div>
