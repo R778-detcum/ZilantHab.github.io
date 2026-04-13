@@ -25,34 +25,9 @@
         }
 
         /* Татарский узор с тюльпанами на фоне - чуть темнее */
-        body::before {
-            content: "";
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 120 120'%3E%3Cpath fill='%2380a87a' fill-opacity='0.15' d='M60,25 L68,35 L78,38 L70,48 L73,58 L60,52 L47,58 L50,48 L42,38 L52,35 Z M30,75 L38,85 L48,88 L40,98 L43,108 L30,102 L17,108 L20,98 L12,88 L22,85 Z M90,75 L98,85 L108,88 L100,98 L103,108 L90,102 L77,108 L80,98 L72,88 L82,85 Z'/%3E%3C/svg%3E");
-            background-repeat: repeat;
-            background-size: 70px 70px;
-            pointer-events: none;
-            z-index: 0;
-        }
 
-        /* Звёзды на фоне – еле заметные */
-        body::after {
-            content: "";
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 120 120'%3E%3Cpath fill='%23ffffff' fill-opacity='0.03' d='M60,15 L62,25 L72,27 L64,35 L66,45 L60,40 L54,45 L56,35 L48,27 L58,25 Z M30,55 L32,65 L42,67 L34,75 L36,85 L30,80 L24,85 L26,75 L18,67 L28,65 Z M90,55 L92,65 L102,67 L94,75 L96,85 L90,80 L84,85 L86,75 L78,67 L88,65 Z M20,20 L21,26 L27,27 L23,32 L24,38 L20,35 L16,38 L17,32 L13,27 L19,26 Z M100,20 L101,26 L107,27 L103,32 L104,38 L100,35 L96,38 L97,32 L93,27 L99,26 Z M50,90 L51,96 L57,97 L53,102 L54,108 L50,105 L46,108 L47,102 L43,97 L49,96 Z M80,100 L81,106 L87,107 L83,112 L84,118 L80,115 L76,118 L77,112 L73,107 L79,106 Z'/%3E%3C/svg%3E");
-            background-repeat: repeat;
-            background-size: 80px 80px;
-            pointer-events: none;
-            z-index: 0;
-        }
+
+
 
         .video-background {
             display: none;
@@ -458,9 +433,9 @@
             cursor: pointer;
             filter: drop-shadow(0 10px 20px rgba(0,0,0,0.2))
                     brightness(1.1)      /* Увеличивает яркость (1 = оригинал, 1.2 = светлее на 20%) */
-                    contrast(0.9)       /* Немного уменьшает контраст */
+                    contrast(0.7)       /* Немного уменьшает контраст */
                     saturate(0.5)        /* Уменьшает насыщенность (холоднее) */
-                    hue-rotate(20deg);   /* Сдвигает цветовой тон в холодную сторону (синий/голубой) */
+                    hue-rotate(15deg);   /* Сдвигает цветовой тон в холодную сторону (синий/голубой) */
             transition: all 0.3s;
             animation: float 3s ease-in-out infinite;
         }

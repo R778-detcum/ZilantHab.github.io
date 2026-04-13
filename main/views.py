@@ -127,32 +127,44 @@ def course_detail(request, slug):
     if request.user.is_authenticated:
         completed_lessons = set(LessonCompletion.objects.filter(user=request.user, lesson__course=course).values_list('lesson_id', flat=True))
 
-    # Определяем доступные уроки (последовательное открытие)
+    # Определяем доступные уроки:
+    # - пройденные уроки всегда доступны
+    # - первый урок доступен всегда
+    # - следующий за последним пройденным тоже доступен
     unlocked_lessons = set()
     if request.user.is_authenticated:
-        # Первый урок всегда разблокирован
+        # Все пройденные уроки разблокированы
+        unlocked_lessons.update(completed_lessons)
+        # Первый урок, если ещё не пройден, тоже разблокирован
         first_lesson = lessons.first()
-        if first_lesson:
+        if first_lesson and first_lesson.id not in completed_lessons:
             unlocked_lessons.add(first_lesson.id)
-        # Идём по порядку: если предыдущий пройден, то текущий разблокирован
-        prev_completed = False
+        # Находим последний пройденный урок
+        last_completed = None
         for lesson in lessons:
             if lesson.id in completed_lessons:
-                prev_completed = True
-            else:
-                if prev_completed:
-                    unlocked_lessons.add(lesson.id)
-                prev_completed = False
+                last_completed = lesson
+        # Если есть последний пройденный, разблокируем следующий за ним (если он существует и не пройден)
+        if last_completed:
+            next_lesson = Lesson.objects.filter(course=course, order=last_completed.order + 1).first()
+            if next_lesson and next_lesson.id not in completed_lessons:
+                unlocked_lessons.add(next_lesson.id)
     else:
-        # Для неавторизованных разблокирован только первый урок
+        # Неавторизованные видят только первый урок
         if lessons:
             unlocked_lessons.add(lessons[0].id)
+
+    # Прогресс в процентах по количеству пройденных уроков
+    total_lessons = course.lessons_count
+    completed_count = len(completed_lessons)
+    progress_percent = (completed_count / total_lessons) * 100 if total_lessons > 0 else 0
 
     context = {
         'course': course,
         'lessons': lessons,
         'completed_lessons': completed_lessons,
         'unlocked_lessons': unlocked_lessons,
+        'progress_percent': round(progress_percent, 1),
     }
     return render(request, 'course_detail.html', context)
 
@@ -238,37 +250,32 @@ def submit_test(request, lesson_id):
 
     total_questions = questions.count()
     percentage = (correct_count / total_questions) * 100 if total_questions > 0 else 0
-    errors = total_questions - correct_count
 
-    if percentage >= 70:
-        completion, created = LessonCompletion.objects.get_or_create(
-            user=request.user,
-            lesson=lesson,
-            defaults={'test_score': percentage}
-        )
-        if created:
-            if errors == 0:
-                exp_points = 100
-                coins = 60
-            elif errors <= 2:
-                exp_points = 80
-                coins = 50
-            else:
-                exp_points = 50
-                coins = 30
+    # Всегда сохраняем результат (даже если <70%)
+    completion, created = LessonCompletion.objects.get_or_create(
+        user=request.user,
+        lesson=lesson,
+        defaults={'test_score': percentage}
+    )
+    if not created and completion.test_score < percentage:
+        completion.test_score = percentage
+        completion.save()
+        messages.info(request, f'Результат теста улучшен до {percentage:.0f}%')
 
-            profile = request.user.profile
-            profile.total_points += exp_points
-            profile.coins += coins
-            profile.lessons_completed += 1
-            profile.save()
-            messages.success(request, f'Урок пройден! +{exp_points} очков опыта, +{coins} монет.')
-        elif completion.test_score < percentage:
-            completion.test_score = percentage
-            completion.save()
-            messages.info(request, 'Результат теста улучшен!')
+    # Начисляем награды ТОЛЬКО при первом прохождении И если процент >= 70
+    if percentage >= 70 and created:
+        exp_points = 150
+        coins = 50
+        profile = request.user.profile
+        profile.total_points += exp_points
+        profile.coins += coins
+        profile.lessons_completed += 1
+        profile.save()
+        messages.success(request, f'Урок пройден! +{exp_points} очков опыта, +{coins} монет.')
+    elif percentage >= 70 and not created:
+        messages.success(request, f'Тест пройден! (награды уже получены ранее)')
     else:
-        messages.warning(request, f'Тест не пройден. Правильных ответов: {correct_count} из {total_questions}. Попробуйте ещё раз.')
+        messages.warning(request, f'Тест не пройден. Правильных ответов: {correct_count} из {total_questions} ({percentage:.0f}%). Нужно 70%.')
 
     context = {
         'lesson': lesson,

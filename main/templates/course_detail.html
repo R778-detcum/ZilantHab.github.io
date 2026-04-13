@@ -11,6 +11,27 @@
             <h1 class="section-title mb-0">{{ course.title }}</h1>
         </div>
 
+        <!-- ПРОГРЕСС ПРОХОЖДЕНИЯ КУРСА -->
+                <!-- ПРОГРЕСС ПРОХОЖДЕНИЯ КУРСА (с учётом процентов тестов) -->
+                <!-- ПРОГРЕСС ПРОХОЖДЕНИЯ КУРСА (по количеству уроков) -->
+        <div class="mb-4">
+            <div class="d-flex justify-content-between mb-1">
+                <span class="text-dark fw-semibold">Прогресс курса</span>
+                <span class="text-dark">{{ progress_percent|floatformat:0 }}%</span>
+            </div>
+            <div class="progress" style="height: 12px; border-radius: 10px;">
+                <div class="progress-bar bg-success" role="progressbar"
+                     style="width: {{ progress_percent }}%;"
+                     aria-valuenow="{{ progress_percent }}"
+                     aria-valuemin="0" aria-valuemax="100"></div>
+            </div>
+            <div class="mt-2 text-center">
+                <small class="text-muted">
+                    Пройдено {{ completed_lessons|length }} из {{ course.lessons_count }} уроков
+                </small>
+            </div>
+        </div>
+
         <div class="row">
             <div class="col-lg-8">
                 <p class="fs-5 text-dark-50 mb-4">{{ course.description|linebreaksbr }}</p>
