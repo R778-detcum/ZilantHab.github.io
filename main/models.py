@@ -82,6 +82,7 @@ class Lesson(models.Model):
     course = models.ForeignKey(Course, on_delete=models.CASCADE, related_name='lessons', verbose_name='Курс')
     title = models.CharField('Название урока', max_length=200)
     order = models.PositiveIntegerField('Порядок', default=0)
+    section = models.CharField('Раздел', max_length=100, blank=True, help_text='Например: Основы, Повседневная речь')
 
     # Контент урока
     video_url = models.URLField('Ссылка на видео', blank=True)
@@ -134,8 +135,6 @@ class Achievement(models.Model):
         return self.name
 
 
-# ... существующие модели Course, Lesson, Community, Achievement остаются ...
-
 class Profile(models.Model):
     """Модель профиля пользователя"""
     user = models.OneToOneField(User, on_delete=models.CASCADE, related_name='profile')
@@ -144,6 +143,7 @@ class Profile(models.Model):
     city = models.CharField('Город', max_length=100, blank=True)
 
     total_points = models.PositiveIntegerField('Всего очков', default=0)
+    coins = models.PositiveIntegerField('Монеты', default=0)
     lessons_completed = models.PositiveIntegerField('Пройдено уроков', default=0)
     created_at = models.DateTimeField('Дата регистрации', auto_now_add=True)
     last_active = models.DateTimeField('Последняя активность', auto_now=True)
@@ -166,3 +166,39 @@ def create_user_profile(sender, instance, created, **kwargs):
 @receiver(post_save, sender=User)
 def save_user_profile(sender, instance, **kwargs):
     instance.profile.save()
+
+
+class Question(models.Model):
+    """Вопрос для теста к уроку"""
+    lesson = models.ForeignKey(Lesson, on_delete=models.CASCADE, related_name='questions', verbose_name='Урок')
+    text = models.TextField('Текст вопроса')
+    option1 = models.CharField('Вариант 1', max_length=200)
+    option2 = models.CharField('Вариант 2', max_length=200)
+    option3 = models.CharField('Вариант 3', max_length=200, blank=True)
+    option4 = models.CharField('Вариант 4', max_length=200, blank=True)
+    correct_option = models.PositiveSmallIntegerField('Номер правильного ответа (1-4)', choices=[(i, str(i)) for i in range(1, 5)])
+    explanation = models.TextField('Пояснение к ответу', blank=True)
+
+    class Meta:
+        verbose_name = 'Вопрос теста'
+        verbose_name_plural = 'Вопросы тестов'
+        ordering = ['id']
+
+    def __str__(self):
+        return f'{self.lesson.title} - {self.text[:50]}'
+
+
+class LessonCompletion(models.Model):
+    """Отметка о прохождении урока пользователем"""
+    user = models.ForeignKey(User, on_delete=models.CASCADE, related_name='completed_lessons')
+    lesson = models.ForeignKey(Lesson, on_delete=models.CASCADE, related_name='completions')
+    completed_at = models.DateTimeField(auto_now_add=True)
+    test_score = models.PositiveSmallIntegerField('Результат теста (%)', default=0)
+
+    class Meta:
+        verbose_name = 'Пройденный урок'
+        verbose_name_plural = 'Пройденные уроки'
+        unique_together = ['user', 'lesson']  # один урок нельзя пройти дважды
+
+    def __str__(self):
+        return f'{self.user.username} - {self.lesson.title}'

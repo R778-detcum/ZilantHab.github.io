@@ -1,0 +1,50 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}{{ lesson.title }} — {{ course.title }}{% endblock %}
+
+{% block content %}
+<div class="container-custom py-5" style="margin-top: 100px;">
+    <nav aria-label="breadcrumb">
+        <ol class="breadcrumb">
+            <li class="breadcrumb-item"><a href="{% url 'home' %}" class="text-success">Главная</a></li>
+            <li class="breadcrumb-item"><a href="{% url 'course_detail' course.slug %}" class="text-success">{{ course.title }}</a></li>
+            <li class="breadcrumb-item active text-dark">{{ lesson.title }}</li>
+        </ol>
+    </nav>
+
+    <div class="card-glass p-5">
+        <div class="d-flex align-items-center gap-2 mb-3">
+            <h1 class="section-title mb-0">{{ lesson.title }}</h1>
+            {% if is_completed %}
+                <span class="badge bg-success"><i class="fas fa-check"></i> Пройдено</span>
+            {% endif %}
+        </div>
+
+        <div class="lesson-content mb-5">
+            {{ lesson.content|safe }}
+        </div>
+
+        {% if lesson.video_url %}
+        <div class="ratio ratio-16x9 mb-5">
+            <iframe src="{{ lesson.video_url }}" allowfullscreen></iframe>
+        </div>
+        {% endif %}
+
+        <div class="d-flex justify-content-between align-items-center">
+            <div>
+                {% if lesson.order > 1 %}
+                    <a href="{% url 'lesson_detail' course.slug lesson.order|add:'-1' %}" class="btn-outline-custom me-2">← Предыдущий урок</a>
+                {% endif %}
+            </div>
+            <div>
+                {% if has_test %}
+                    <a href="{% url 'take_test' lesson.id %}" class="btn-primary-custom">Пройти тест →</a>
+                {% else %}
+                    <span class="text-muted">Тест отсутствует</span>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

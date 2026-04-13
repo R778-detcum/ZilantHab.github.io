@@ -20,7 +20,11 @@
                         <span class="badge bg-warning text-dark">{{ course.price }} ₽</span>
                     {% endif %}
                 </div>
-                <button class="btn-primary-custom w-100 mt-3" data-bs-toggle="modal" data-bs-target="#registerModal">Начать обучение</button>
+                {% if user.is_authenticated %}
+    <a href="{% url 'course_detail' course.slug %}" class="btn-primary-custom w-100 mt-3 text-center">Начать обучение</a>
+{% else %}
+    <button class="btn-primary-custom w-100 mt-3" data-bs-toggle="modal" data-bs-target="#registerModal">Начать обучение</button>
+{% endif %}
             </div>
         </div>
         {% empty %}

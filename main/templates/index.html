@@ -39,6 +39,21 @@
             z-index: 0;
         }
 
+        /* Звёзды на фоне – еле заметные */
+        body::after {
+            content: "";
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 120 120'%3E%3Cpath fill='%23ffffff' fill-opacity='0.03' d='M60,15 L62,25 L72,27 L64,35 L66,45 L60,40 L54,45 L56,35 L48,27 L58,25 Z M30,55 L32,65 L42,67 L34,75 L36,85 L30,80 L24,85 L26,75 L18,67 L28,65 Z M90,55 L92,65 L102,67 L94,75 L96,85 L90,80 L84,85 L86,75 L78,67 L88,65 Z M20,20 L21,26 L27,27 L23,32 L24,38 L20,35 L16,38 L17,32 L13,27 L19,26 Z M100,20 L101,26 L107,27 L103,32 L104,38 L100,35 L96,38 L97,32 L93,27 L99,26 Z M50,90 L51,96 L57,97 L53,102 L54,108 L50,105 L46,108 L47,102 L43,97 L49,96 Z M80,100 L81,106 L87,107 L83,112 L84,118 L80,115 L76,118 L77,112 L73,107 L79,106 Z'/%3E%3C/svg%3E");
+            background-repeat: repeat;
+            background-size: 80px 80px;
+            pointer-events: none;
+            z-index: 0;
+        }
+
         .video-background {
             display: none;
         }
@@ -553,6 +568,29 @@
             .section-title { font-size: 1.8rem; }
             .section-subtitle { font-size: 1rem; }
         }
+
+        /* Убираем подчёркивания у всех ссылок и кнопок */
+        a, a:hover, a:visited, .btn, .nav-link, button, .btn-outline-custom, .btn-primary-custom, .navbar-brand, .lang-btn {
+            text-decoration: none !important;
+        }
+
+        /* Отображение очков и монет в навбаре */
+        .user-stats {
+            display: flex;
+            gap: 12px;
+            align-items: center;
+            margin-right: 10px;
+        }
+        .stat-item {
+            display: flex;
+            align-items: center;
+            gap: 4px;
+            font-weight: 600;
+            color: #1a3a1a;
+        }
+        .stat-item i {
+            color: #e8b830;
+        }
     </style>
 </head>
 <body>
@@ -592,6 +630,10 @@
             <button class="lang-btn active" id="langRu">Рус</button>
             <button class="lang-btn" id="langTt">Тат</button>
             {% if user.is_authenticated %}
+                <div class="user-stats">
+                    <span class="stat-item"><i class="fas fa-star"></i> {{ user.profile.total_points|default:0 }}</span>
+                    <span class="stat-item"><i class="fas fa-coins"></i> {{ user.profile.coins|default:0 }}</span>
+                </div>
                 <span class="text-dark me-2">
                     <i class="fas fa-user me-1"></i>{{ user.username }}
                 </span>
@@ -643,7 +685,11 @@
                         <span class="old-price">10 000 ₽</span>
                         <span class="new-price ms-3">Бесплатно</span>
                     </div>
-                    <button class="btn-primary-custom mt-4 w-100" data-bs-toggle="modal" data-bs-target="#registerModal">Начать обучение →</button>
+                    {% if user.is_authenticated %}
+    <a href="{% url 'course_detail' 'tatarskii-yazyk-s-nulya' %}" class="btn-primary-custom mt-4 w-100 text-center">Начать обучение →</a>
+{% else %}
+    <button class="btn-primary-custom mt-4 w-100" data-bs-toggle="modal" data-bs-target="#registerModal">Начать обучение →</button>
+{% endif %}
                 </div>
             </div>
             <div class="col-lg-6">

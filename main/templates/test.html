@@ -1,0 +1,49 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}Тест: {{ lesson.title }}{% endblock %}
+
+{% block content %}
+<div class="container-custom py-5" style="margin-top: 100px;">
+    <div class="card-glass p-5">
+        <h1 class="section-title mb-4">Тест: {{ lesson.title }}</h1>
+        <p class="text-dark-50 mb-4">Ответьте на {{ questions.count }} вопросов по пройденному материалу.</p>
+
+        <form method="post" action="{% url 'submit_test' lesson.id %}">
+            {% csrf_token %}
+            {% for question in questions %}
+            <div class="mb-4 p-3 bg-light rounded">
+                <h5 class="fw-bold text-success">{{ forloop.counter }}. {{ question.text }}</h5>
+                <div class="ms-3 mt-2">
+                    <div class="form-check mb-2">
+                        <input class="form-check-input" type="radio" name="question_{{ question.id }}" id="q{{ question.id }}_1" value="1" required>
+                        <label class="form-check-label" for="q{{ question.id }}_1">{{ question.option1 }}</label>
+                    </div>
+                    <div class="form-check mb-2">
+                        <input class="form-check-input" type="radio" name="question_{{ question.id }}" id="q{{ question.id }}_2" value="2">
+                        <label class="form-check-label" for="q{{ question.id }}_2">{{ question.option2 }}</label>
+                    </div>
+                    {% if question.option3 %}
+                    <div class="form-check mb-2">
+                        <input class="form-check-input" type="radio" name="question_{{ question.id }}" id="q{{ question.id }}_3" value="3">
+                        <label class="form-check-label" for="q{{ question.id }}_3">{{ question.option3 }}</label>
+                    </div>
+                    {% endif %}
+                    {% if question.option4 %}
+                    <div class="form-check mb-2">
+                        <input class="form-check-input" type="radio" name="question_{{ question.id }}" id="q{{ question.id }}_4" value="4">
+                        <label class="form-check-label" for="q{{ question.id }}_4">{{ question.option4 }}</label>
+                    </div>
+                    {% endif %}
+                </div>
+            </div>
+            {% endfor %}
+
+            <div class="d-flex justify-content-between">
+                <a href="{% url 'lesson_detail' lesson.course.slug lesson.order %}" class="btn-outline-custom">← Вернуться к уроку</a>
+                <button type="submit" class="btn-primary-custom">Завершить тест</button>
+            </div>
+        </form>
+    </div>
+</div>
+{% endblock %}
