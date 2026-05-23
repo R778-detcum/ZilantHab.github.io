@@ -1,0 +1,44 @@
+{% extends 'base.html' %}
+
+{% block title %}Магазин — TatarSkill{% endblock %}
+
+{% block content %}
+<div class="container-custom py-5" style="margin-top: 100px;">
+    <h1 class="section-title text-center mb-4">Магазин</h1>
+    <div class="row g-4">
+        {% for item in items %}
+        <div class="col-md-4">
+            <div class="card-glass p-4 text-center">
+                <i class="{{ item.icon_class }} fa-3x mb-3 text-success"></i>
+                <h4>{{ item.tatar_name }}</h4>
+                <p>{{ item.name }}</p>
+                <div class="mb-3">
+                    {% if item.price_coins %}
+                        <span class="badge bg-warning text-dark"><i class="fas fa-coins"></i> {{ item.price_coins }}</span>
+                    {% endif %}
+                    {% if item.price_tulips %}
+                        <span class="badge bg-danger"><i class="fas fa-tulip"></i> {{ item.price_tulips }}</span>
+                    {% endif %}
+                </div>
+                <a href="{% url 'purchase_item' item.id %}" class="btn-primary-custom">Купить</a>
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+
+    <h2 class="section-title mt-5 mb-3">Мой инвентарь</h2>
+    <div class="row">
+        {% for inv in inventory %}
+        <div class="col-md-3">
+            <div class="card p-2">
+                <i class="{{ inv.item.icon_class }}"></i> {{ inv.item.tatar_name }}
+                <span class="badge bg-secondary">до {{ inv.expires_at|date:"d.m.Y H:i"|default:"навсегда" }}</span>
+                <a href="{% url 'use_item' inv.id %}" class="btn-sm btn-outline-success mt-2">Использовать</a>
+            </div>
+        </div>
+        {% empty %}
+        <p>Пусто.</p>
+        {% endfor %}
+    </div>
+</div>
+{% endblock %}

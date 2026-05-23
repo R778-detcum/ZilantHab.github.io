@@ -25,7 +25,6 @@
         }
 
         /* Татарский узор с тюльпанами на фоне - чуть темнее */
-        /* Татарский узор с раскрытым тюльпаном */
         body::before {
             content: "";
             position: fixed;
@@ -33,15 +32,12 @@
             left: 0;
             width: 100%;
             height: 100%;
-            background-image: url("впивdata:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 120 120'%3E%3Cpath fill='%236a8a5a' fill-opacity='0.12' d='M60,20 C60,20 45,35 40,55 C35,75 50,85 60,90 C70,85 85,75 80,55 C75,35 60,20 60,20 Z M60,90 L60,105 C60,105 55,105 55,105 L65,105 C65,105 60,105 60,105 Z'/%3E%3C/svg%3E");
+            background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Cpath fill='%239bc49b' fill-opacity='0.08' d='M50,15 L55,25 L65,28 L58,38 L60,48 L50,42 L40,48 L42,38 L35,28 L45,25 Z M30,55 L35,65 L45,68 L38,78 L40,88 L30,82 L20,88 L22,78 L15,68 L25,65 Z M70,55 L75,65 L85,68 L78,78 L80,88 L70,82 L60,88 L62,78 L55,68 L65,65 Z'/%3E%3C/svg%3E");
             background-repeat: repeat;
             background-size: 180px 180px;
             pointer-events: none;
             z-index: 0;
         }
-
-
-
 
         .video-background {
             display: none;
@@ -87,6 +83,7 @@
             border-radius: 12px;
             transition: all 0.3s;
             box-shadow: 0 4px 15px rgba(100, 140, 80, 0.3);
+            text-decoration: none !important;
         }
         .btn-primary-custom:hover {
             transform: translateY(-2px);
@@ -102,6 +99,7 @@
             padding: 12px 32px;
             border-radius: 12px;
             transition: all 0.2s;
+            text-decoration: none !important;
         }
         .btn-outline-custom:hover {
             background: rgba(100, 140, 80, 0.15);
@@ -191,7 +189,6 @@
             line-height: 1.6;
         }
 
-        /* Стили для картинки */
         .hero-image {
             width: 100%;
             height: 600px;
@@ -205,7 +202,6 @@
             transform: scale(1.02);
         }
 
-        /* Прижимаем картинку к правому краю */
         .hero .row {
             display: flex;
             flex-wrap: wrap;
@@ -363,6 +359,7 @@
             margin-bottom: 14px;
             color: #2a4a2a;
         }
+
         @media (max-width: 768px) {
             .communities-wrapper { padding: 0 40px; }
             .swiper-communities .swiper-slide { width: 280px; }
@@ -443,13 +440,9 @@
             z-index: 1000;
         }
         .ai-dino {
-            width: 120px;
+            width: 310px;
             cursor: pointer;
-            filter: drop-shadow(0 10px 20px rgba(0,0,0,0.2))
-                    brightness(1.1)      /* Увеличивает яркость (1 = оригинал, 1.2 = светлее на 20%) */
-                    contrast(0.7)       /* Немного уменьшает контраст */
-                    saturate(0.5)        /* Уменьшает насыщенность (холоднее) */
-                    hue-rotate(15deg);   /* Сдвигает цветовой тон в холодную сторону (синий/голубой) */
+            filter: drop-shadow(0 10px 20px rgba(0,0,0,0.2)) brightness(1.1) contrast(0.7) saturate(0.5) hue-rotate(15deg);
             transition: all 0.3s;
             animation: float 3s ease-in-out infinite;
         }
@@ -533,7 +526,7 @@
         }
         @media (max-width: 550px) {
             .chat-popup { width: 320px; right: 10px; bottom: 130px; }
-            .ai-dino { width: 85px; }
+            .ai-dino { width: 200px; }
         }
 
         footer {
@@ -558,12 +551,10 @@
             .section-subtitle { font-size: 1rem; }
         }
 
-        /* Убираем подчёркивания у всех ссылок и кнопок */
         a, a:hover, a:visited, .btn, .nav-link, button, .btn-outline-custom, .btn-primary-custom, .navbar-brand, .lang-btn {
             text-decoration: none !important;
         }
 
-        /* Отображение очков и монет в навбаре */
         .user-stats {
             display: flex;
             gap: 12px;
@@ -581,7 +572,6 @@
             color: #e8b830;
         }
 
-        /* === ДОБАВЛЕННЫЙ СТИЛЬ ДЛЯ КАРТИНКИ В УГЛУ === */
         .corner-image {
             position: fixed;
             top: 20px;
@@ -597,15 +587,10 @@
 </head>
 <body>
 
-<!-- ДОБАВЛЕННАЯ КАРТИНКА В ВЕРХНЕМ ПРАВОМ УГЛУ -->
-<img src="https://freeimage.host/i/Bg6Cv3b"><img src="https://iili.io/Bg6Cv3b.md.png"
-     alt="Татарский узор"
-     class="corner-image">
-
 <div class="overlay-gradient"></div>
 
 <div class="ai-widget">
-    <img src="https://thumbs4.imagebam.com/db/54/0d/ME1BPFSD_t.PNG"
+    <img src="https://i.imgur.com/mrrNTcQ.png"
          alt="ИИ помощник"
          class="ai-dino"
          id="dinoBtn"
@@ -654,8 +639,50 @@
     </div>
 </nav>
 
-<div class="modal fade" id="loginModal" tabindex="-1"><div class="modal-dialog modal-dialog-centered"><div class="modal-content bg-white text-dark rounded-4"><div class="modal-header border-0"><h5 class="fw-bold text-success">Вход</h5><button type="button" class="btn-close" data-bs-dismiss="modal"></button></div><div class="modal-body"><input type="email" class="form-control mb-3 bg-light border-success" placeholder="Email"><input type="password" class="form-control mb-3 bg-light border-success" placeholder="Пароль"><button class="btn-primary-custom w-100" data-bs-dismiss="modal">Войти</button><p class="text-center mt-3">Нет аккаунта? <a href="#" class="text-success" data-bs-toggle="modal" data-bs-target="#registerModal">Регистрация</a></p></div></div></div></div>
-<div class="modal fade" id="registerModal" tabindex="-1"><div class="modal-dialog modal-dialog-centered"><div class="modal-content bg-white text-dark rounded-4"><div class="modal-header border-0"><h5 class="fw-bold text-success">Регистрация</h5><button type="button" class="btn-close" data-bs-dismiss="modal"></button></div><div class="modal-body"><input type="text" class="form-control mb-3 bg-light border-success" placeholder="Имя"><input type="email" class="form-control mb-3 bg-light border-success" placeholder="Email"><input type="password" class="form-control mb-3 bg-light border-success" placeholder="Пароль"><button class="btn-primary-custom w-100" data-bs-dismiss="modal">Создать аккаунт</button></div></div></div></div>
+<!-- Модальное окно входа (исправленное) -->
+<div class="modal fade" id="loginModal" tabindex="-1">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content bg-white text-dark rounded-4">
+            <div class="modal-header border-0">
+                <h5 class="fw-bold text-success">Вход</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+            </div>
+            <form method="post" action="{% url 'login' %}">
+                {% csrf_token %}
+                <div class="modal-body">
+                    <input type="text" name="username" class="form-control mb-3 bg-light border-success" placeholder="Имя пользователя" required>
+                    <input type="password" name="password" class="form-control mb-3 bg-light border-success" placeholder="Пароль" required>
+                    <button type="submit" class="btn-primary-custom w-100">Войти</button>
+                    <p class="text-center mt-3">
+                        Нет аккаунта? <a href="#" class="text-success" data-bs-toggle="modal" data-bs-target="#registerModal">Регистрация</a>
+                    </p>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+<!-- Модальное окно регистрации (исправленное) -->
+<div class="modal fade" id="registerModal" tabindex="-1">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content bg-white text-dark rounded-4">
+            <div class="modal-header border-0">
+                <h5 class="fw-bold text-success">Регистрация</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+            </div>
+            <form method="post" action="{% url 'register' %}">
+                {% csrf_token %}
+                <div class="modal-body">
+                    <input type="text" name="username" class="form-control mb-3 bg-light border-success" placeholder="Имя пользователя" required>
+                    <input type="email" name="email" class="form-control mb-3 bg-light border-success" placeholder="Email" required>
+                    <input type="password" name="password1" class="form-control mb-3 bg-light border-success" placeholder="Пароль" required>
+                    <input type="password" name="password2" class="form-control mb-3 bg-light border-success" placeholder="Подтверждение пароля" required>
+                    <button type="submit" class="btn-primary-custom w-100">Создать аккаунт</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
 
 <section class="hero">
     <div class="container-custom">
@@ -665,11 +692,15 @@
                 <h1 class="hero-title">Учись <span class="gold-gradient">на родном языке</span><br>с интеллектуальным помощником 24/7</h1>
                 <p class="fs-5 hero-text mb-4">Искусственный интеллект помогает с произношением, создает персональные заметки, а сообщества и кланы открывают возможности для живого общения и совместного обучения.</p>
                 <div class="d-flex gap-4 mt-5 hero-text">
-                    <a href="{% url 'register' %}" class="btn-primary-custom">Поступить</a>
+                    {% if user.is_authenticated %}
+                        <a href="{% url 'education' %}" class="btn-primary-custom">Начать учиться</a>
+                    {% else %}
+                        <button class="btn-primary-custom" data-bs-toggle="modal" data-bs-target="#registerModal">Поступить</button>
+                    {% endif %}
                 </div>
             </div>
             <div class="col-lg-5 mt-5 mt-lg-0">
-
+                <!-- здесь может быть картинка -->
             </div>
         </div>
     </div>
@@ -678,7 +709,7 @@
 <section id="courses" class="py-5">
     <div class="container-custom">
         <div class="text-center mb-5">
-            <h2 class="section-title"> Наши курсы</h2>
+            <h2 class="section-title">Наши курсы</h2>
             <p class="section-subtitle fs-5">Начните изучение уже сегодня</p>
         </div>
         <div class="row g-4">
@@ -693,10 +724,10 @@
                         <span class="new-price ms-3">Бесплатно</span>
                     </div>
                     {% if user.is_authenticated %}
-    <a href="{% url 'course_detail' 'tatarskii-yazyk-s-nulya' %}" class="btn-primary-custom mt-4 w-100 text-center">Начать обучение →</a>
-{% else %}
-    <button class="btn-primary-custom mt-4 w-100" data-bs-toggle="modal" data-bs-target="#registerModal">Начать обучение →</button>
-{% endif %}
+                        <a href="{% url 'course_detail' 'tatarskii-yazyk-s-nulya' %}" class="btn-primary-custom mt-4 w-100 text-center">Начать обучение →</a>
+                    {% else %}
+                        <button class="btn-primary-custom mt-4 w-100" data-bs-toggle="modal" data-bs-target="#registerModal">Начать обучение →</button>
+                    {% endif %}
                 </div>
             </div>
             <div class="col-lg-6">
@@ -796,7 +827,7 @@
     let conversationHistory = [
         {
             role: "system",
-            content: "Ты — дружелюбный ИИ-репетитор. Если пользователь пишет на татарском, отвечай на татарском. Если пользоваетель разговариет с тобоц на русском — отвечай на русском. Если пользователь пишет на русском значит разговаривай только на русском и никакого татарского. Используй приветствия на татарском: 'Исәнмесез!', 'Рәхим итегез!' и т.д. Не используй markdown, только обычный текст."
+            content: "Ты — дружелюбный ИИ-репетитор. Если пользователь пишет на татарском, отвечай на татарском. Если пользователь разговаривает с тобой на русском — отвечай на русском. Если пользователь пишет на русском значит разговаривай только на русском и никакого татарского. Используй приветствия на татарском: 'Исәнмесез!', 'Рәхим итегез!' и т.д. Не используй markdown, только обычный текст."
         }
     ];
 
@@ -949,26 +980,30 @@
     closeChat.addEventListener('click', () => {
         chatPopup.style.display = 'none';
     });
-    document.getElementById('openChatBtn').addEventListener('click', () => {
-        chatPopup.style.display = 'flex';
-        const messages = document.querySelectorAll('#chatMessages .justify-content-start');
-        if (messages.length === 0 || !messages[0].innerText.includes('Исәнмесез')) {
-            addMessage("Исәнмесез! Я AI-репетитор. Помогу вам выучить татарский язык. Спрашивайте! 😊", false);
-        }
-    });
+    // Открытие чата по кнопке (если есть)
+    const openChatBtn = document.getElementById('openChatBtn');
+    if (openChatBtn) {
+        openChatBtn.addEventListener('click', () => {
+            chatPopup.style.display = 'flex';
+            const messages = document.querySelectorAll('#chatMessages .justify-content-start');
+            if (messages.length === 0 || !messages[0].innerText.includes('Исәнмесез')) {
+                addMessage("Исәнмесез! Я AI-репетитор. Помогу вам выучить татарский язык. Спрашивайте! 😊", false);
+            }
+        });
+    }
+    // Обработчики для карточек сообществ, кланов и достижений
     document.querySelectorAll('.community-card, .clan-card, .achievement-item').forEach(el => {
         el.addEventListener('click', () => {
             if (!el.classList.contains('unlocked') && el.classList.contains('achievement-item')) {
                 alert('🔒 Выполните уроки, чтобы открыть это достижение!');
             } else {
-                alert('🌟 Зарегистрируйтесь, чтобы получить полный доступ!');
-                new bootstrap.Modal(document.getElementById('registerModal')).show();
+                if (!{% if user.is_authenticated %}true{% else %}false{% endif %}) {
+                    new bootstrap.Modal(document.getElementById('registerModal')).show();
+                } else {
+                    alert('🌟 Функция скоро появится!');
+                }
             }
         });
-    });
-    document.addEventListener('DOMContentLoaded', function() {
-        const navbar = document.getElementById('navbar');
-        if (navbar) {}
     });
 </script>
 </body>

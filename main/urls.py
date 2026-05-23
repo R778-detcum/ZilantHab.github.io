@@ -18,4 +18,15 @@ urlpatterns = [
     path('lesson/<int:lesson_id>/test/', views.take_test, name='take_test'),
     path('lesson/<int:lesson_id>/test/submit/', views.submit_test, name='submit_test'),
 
+    # Новые маршруты для лиг, магазина, достижений
+    path('league/', views.league_table, name='league'),
+    path('shop/', views.shop, name='shop'),
+    path('shop/buy/<int:item_id>/', views.purchase_item, name='purchase_item'),
+    path('shop/use/<int:inventory_id>/', views.use_item, name='use_item'),
+    path('achievements/', views.achievements_list, name='achievements'),
+
+    path('api/check-answer/', views.check_answer_ajax, name='check_answer_ajax'),
+
+    # TTS для озвучки (если будете использовать)
+    # path('tts/', views.tts, name='tts'),  # раскомментируйте, когда добавите функцию tts в views.py
 ]

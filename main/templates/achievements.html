@@ -1,0 +1,35 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}Достижения — TatarSkill{% endblock %}
+
+{% block content %}
+<div class="container-custom py-5" style="margin-top: 100px;">
+    <h1 class="section-title text-center mb-4">Достижения</h1>
+    <div class="row">
+        {% for ach in achievements %}
+        <div class="col-md-4 mb-4">
+            <div class="card-glass p-3 text-center">
+                <i class="{{ ach.icon_class }} fa-3x text-warning mb-2"></i>
+                <h5>{{ ach.name }}</h5>
+                <p class="small">{{ ach.description }}</p>
+                {% with progress=user_progress|get_item:ach.id %}
+                    {% if progress %}
+                        <div class="progress mb-2" style="height: 8px;">
+                            {% with next_level=ach.levels.first %}
+                                {% if next_level %}
+                                    <div class="progress-bar bg-success" style="width: {% widthratio progress.current_value next_level.required_value 100 %}%"></div>
+                                {% endif %}
+                            {% endwith %}
+                        </div>
+                        <span class="badge bg-info">Уровень {{ progress.current_level }} / {{ ach.levels.count }}</span>
+                    {% else %}
+                        <span class="badge bg-secondary">Не начато</span>
+                    {% endif %}
+                {% endwith %}
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+</div>
+{% endblock %}
