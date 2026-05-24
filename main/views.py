@@ -135,7 +135,8 @@ def course_detail(request, slug):
     completed_lessons = set()
     if request.user.is_authenticated:
         completed_lessons = set(
-            LessonCompletion.objects.filter(user=request.user, lesson__course=course).values_list('lesson_id', flat=True))
+            LessonCompletion.objects.filter(user=request.user, lesson__course=course).values_list('lesson_id',
+                                                                                                  flat=True))
     unlocked_lessons = set()
     if request.user.is_authenticated:
         unlocked_lessons.update(completed_lessons)
@@ -232,12 +233,52 @@ def check_answer_ajax(request):
 def submit_test(request, lesson_id):
     if request.method != 'POST':
         return JsonResponse({'error': 'Метод не поддерживается'}, status=405)
+
     lesson = get_object_or_404(Lesson, id=lesson_id)
+
     if not check_lesson_access(request.user, lesson):
         messages.error(request, 'Этот урок ещё не доступен.')
         return redirect('course_detail', slug=lesson.course.slug)
-    # Для упрощения сразу говорим, что тест пройден
-    return JsonResponse({'passed': True, 'redirect_url': reverse('course_detail', args=[lesson.course.slug])})
+
+    questions = list(lesson.questions.all())
+    total_questions = len(questions)
+
+    # Подсчёт правильных ответов
+    correct_count = 0
+    for question in questions:
+        answer_key = f'question_{question.id}'
+        selected_option = request.POST.get(answer_key)
+        if selected_option and int(selected_option) == question.correct_option:
+            correct_count += 1
+
+    # Вычисляем процент
+    percentage = (correct_count / total_questions * 100) if total_questions > 0 else 0
+
+    # ВСЕГДА сохраняем прохождение, даже если процент ниже 70
+    completion, created = LessonCompletion.objects.get_or_create(
+        user=request.user,
+        lesson=lesson,
+        defaults={'test_score': percentage}
+    )
+
+    # Обновляем процент, если он стал выше
+    if not created and completion.test_score < percentage:
+        completion.test_score = percentage
+        completion.save()
+
+    # Начисляем награды ТОЛЬКО за первое прохождение (независимо от процента)
+    if created:
+        profile = request.user.profile
+        profile.total_points += 150
+        profile.coins += 50
+        profile.lessons_completed += 1
+        profile.save()
+        messages.success(request, f'🎉 Урок пройден! +150 очков опыта, +50 монет.')
+    else:
+        messages.info(request, f'Тест пройден повторно. Результат: {percentage:.0f}%')
+
+    # Перенаправляем на страницу курса, чтобы показать разблокированные уроки
+    return redirect('course_detail', slug=lesson.course.slug)
 
 
 def find_or_create_league_instance_for_user(user):
@@ -257,7 +298,8 @@ def league_table(request):
         messages.info(request, 'Вы ещё не попали в лигу. Пройдите несколько уроков.')
         return redirect('profile')
     league_instance = membership.league_instance
-    all_members = UserLeagueMembership.objects.filter(league_instance=league_instance, week_start=week_start).order_by('-weekly_xp')
+    all_members = UserLeagueMembership.objects.filter(league_instance=league_instance, week_start=week_start).order_by(
+        '-weekly_xp')
     for idx, m in enumerate(all_members, start=1):
         m.rank = idx
     user_rank = next((idx for idx, m in enumerate(all_members, start=1) if m.user == request.user), None)
@@ -329,6 +371,7 @@ def achievements_list(request):
     @register.filter
     def get_item(dictionary, key):
         return dictionary.get(key)
+
     context = {
         'achievements': achievements,
         'user_progress': user_progress,
