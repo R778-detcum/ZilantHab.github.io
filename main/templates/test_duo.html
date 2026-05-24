@@ -1,0 +1,405 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}Тест: {{ lesson.title }}{% endblock %}
+
+{% block extra_head %}
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+<script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1"></script>
+<style>
+  /* ===== СТИЛИ (без изменений) ===== */
+  #modern-test {
+    --primary: #10b981;
+    --primary-dark: #059669;
+    --danger: #ef4444;
+    --warning: #f59e0b;
+    --text: #0f172a;
+    --text-muted: #64748b;
+    --bg-gradient: linear-gradient(145deg, #eef2fb 0%, #f9f7fd 100%);
+    --card-bg: rgba(255, 255, 255, 0.94);
+    --card-shadow: 0 25px 45px -12px rgba(0, 0, 0, 0.2);
+    --border-radius: 32px;
+    --transition: 0.2s ease;
+    font-family: 'Inter', system-ui, sans-serif;
+    background: var(--bg-gradient);
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+  }
+  .top-bar {
+    position: sticky; top: 0; z-index: 100;
+    background: rgba(255,255,255,0.8);
+    backdrop-filter: blur(20px);
+    padding: 12px 28px;
+    display: flex; align-items: center; justify-content: space-between;
+    flex-wrap: wrap; gap: 12px;
+    border-bottom: 1px solid rgba(0,0,0,0.05);
+  }
+  .question-counter { font-weight: 700; background: #f1f5f9; padding: 8px 20px; border-radius: 100px; }
+  .lives-indicator { display: flex; gap: 6px; align-items: center; }
+  .heart { font-size: 1.7rem; }
+  .heart-lost { color: #cbd5e1; filter: grayscale(1); transform: scale(0.85); }
+  .combo-indicator { background: #fef3c7; padding: 8px 16px; border-radius: 100px; font-weight: 700; color: #b45309; }
+  .timer-block { display: flex; align-items: center; gap: 12px; background: #f8fafc; padding: 6px 16px; border-radius: 100px; }
+  .timer-text { font-weight: 800; font-size: 1.4rem; min-width: 40px; text-align: center; }
+  .timer-bar { width: 80px; height: 8px; background: #e2e8f0; border-radius: 10px; overflow: hidden; }
+  .timer-progress { height: 100%; width: 100%; background: var(--primary); transition: width 0.2s linear; }
+  .timer-progress.warning { background: var(--warning); }
+  .timer-progress.danger { background: var(--danger); animation: pulse 1s infinite; }
+  @keyframes pulse { 0%,100% { opacity: 1; } 50% { opacity: 0.6; } }
+  .main-content { flex: 1; display: flex; align-items: center; justify-content: center; padding: 32px 24px 56px; }
+  .quiz-card { width: 100%; max-width: 1100px; background: var(--card-bg); backdrop-filter: blur(14px); border-radius: var(--border-radius); box-shadow: var(--card-shadow); padding: 32px 36px 44px; }
+  .character-area { display: flex; align-items: flex-start; gap: 0; margin-bottom: 10px; position: relative; padding-left: 200px; min-height: 260px; }
+  .dino-avatar { position: absolute; left: -80px; top: -100px; width: 360px !important; height: 360px !important; background: transparent; border: none; object-fit: contain; z-index: 2; }
+  .speech-bubble { background: white; border-radius: 28px; padding: 20px 32px; flex: 1; border: 1px solid #e2e8f0; box-shadow: 0 8px 24px rgba(0,0,0,0.06); z-index: 1; }
+  #question-text { font-size: 2.2rem; font-weight: 800; line-height: 1.35; margin: 0; }
+  .options-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 20px; margin-top: 20px; }
+  .option-btn { display: flex; align-items: center; gap: 20px; background: white; border: 2px solid #e9eef2; border-radius: 24px; padding: 20px 24px; cursor: pointer; transition: var(--transition); font-size: 1.4rem; font-weight: 700; }
+  .option-btn:hover { background: #fafcff; border-color: #b0c4d9; transform: translateY(-2px); }
+  .option-letter { width: 52px; height: 52px; display: flex; align-items: center; justify-content: center; background: #f1f5f9; border-radius: 20px; font-size: 1.7rem; color: var(--primary); border: 2px solid #e2e8f0; }
+  .option-btn:hover .option-letter { background: var(--primary); color: white; }
+  .option-text { flex: 1; line-height: 1.3; }
+  .correct-glow { background: #ecfdf5 !important; border-color: var(--primary) !important; animation: correctPulse 0.45s ease; }
+  .correct-glow .option-letter { background: var(--primary) !important; color: white; }
+  @keyframes correctPulse { 0% { box-shadow: 0 0 0 0 rgba(16,185,129,0.4); } 100% { box-shadow: 0 0 0 14px rgba(16,185,129,0); } }
+  @keyframes shake { 0%,100% { transform: translateX(0); } 20%,60% { transform: translateX(-6px); } 40%,80% { transform: translateX(6px); } }
+  .wrong-shake { animation: shake 0.3s ease; background: #fef2f2 !important; border-color: var(--danger) !important; }
+  .wrong-shake .option-letter { background: var(--danger) !important; color: white; }
+  .option-btn.disabled { opacity: 0.7; pointer-events: none; }
+  .feedback { margin-top: 20px; padding: 12px 20px; border-radius: 20px; font-size: 1rem; text-align: center; }
+  .feedback.correct { background: #d1fae5; color: #065f46; }
+  .feedback.wrong { background: #fee2e2; color: #991b1b; }
+  @media (max-width: 800px) { .options-grid { grid-template-columns: 1fr; } .character-area { padding-left: 140px; min-height: 200px; } .dino-avatar { width: 200px !important; height: 200px !important; top: -60px; left: -40px; } #question-text { font-size: 1.9rem; } }
+  @media (max-width: 550px) { .quiz-card { padding: 24px 20px 32px; } .character-area { padding-left: 100px; min-height: 150px; } .dino-avatar { width: 130px !important; height: 130px !important; top: -40px; left: -25px; } #question-text { font-size: 1.6rem; } .option-btn { padding: 14px 18px; font-size: 1.2rem; gap: 12px; } .option-letter { width: 44px; height: 44px; font-size: 1.4rem; } }
+</style>
+{% endblock %}
+
+{% block content %}
+<div id="modern-test">
+  <div class="top-bar">
+    <span class="question-counter" id="question-counter">1 / {{ questions.count }}</span>
+    <div class="lives-indicator" id="lives-container"></div>
+    <div class="combo-indicator" id="combo-indicator">🔥 Комбо: 0</div>
+    <div class="timer-block">
+      <span class="timer-text" id="timer-text">30</span>
+      <div class="timer-bar">
+        <div class="timer-progress" id="timer-progress"></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="main-content">
+    <div class="quiz-card">
+      <div class="character-area">
+        <img src="https://i.imgur.com/mrrNTcQ.png" class="dino-avatar" alt="🦖"
+             onerror="this.onerror=null; this.src='https://via.placeholder.com/360/fbbf24/000?text=🦖'">
+        <div class="speech-bubble">
+          <p id="question-text">Загрузка вопроса...</p>
+        </div>
+      </div>
+      <div class="options-grid" id="options-container"></div>
+      <div id="feedback" class="feedback" style="display: none;"></div>
+    </div>
+  </div>
+</div>
+
+<script>
+  window.lessonId = {{ lesson.id }};
+  window.csrfToken = '{{ csrf_token }}';
+
+  // Удаляем возможные старые флаги в localStorage/sessionStorage
+  if (localStorage.getItem('test_completed_' + window.lessonId)) {
+    localStorage.removeItem('test_completed_' + window.lessonId);
+  }
+  sessionStorage.removeItem('test_completed_' + window.lessonId);
+
+  const questionsJson = [
+    {% for question in questions %}
+    {
+      id: {{ question.id }},
+      text: "{{ question.text|escapejs }}",
+      question_type: "{{ question.question_type }}",
+      correct_option: {{ question.correct_option }},
+      explanation: "{{ question.explanation|escapejs }}",
+      audio_url: "{{ question.audio_url|default:'' }}",
+      options_raw: [{% for num, opt in question.get_options %}"{{ opt|escapejs }}"{% if not forloop.last %},{% endif %}{% endfor %}],
+      correct_answer_text: "{{ question.option1|escapejs }}"
+    }{% if not forloop.last %},{% endif %}
+    {% endfor %}
+  ];
+
+  // Перемешивание вариантов
+  for (let q of questionsJson) {
+    let options = q.options_raw.slice();
+    let correctValue = options[q.correct_option - 1];
+    for (let i = options.length - 1; i > 0; i--) {
+      const j = Math.floor(Math.random() * (i + 1));
+      [options[i], options[j]] = [options[j], options[i]];
+    }
+    q.options = options;
+    q.correct_option = options.indexOf(correctValue) + 1;
+  }
+
+  let currentQuestionIndex = 0;
+  let userLives = 5;
+  let timerInterval = null;
+  let canAnswer = true;
+  let comboCount = 0;
+  let totalQuestions = questionsJson.length;
+
+  const questionTextEl = document.getElementById('question-text');
+  const questionCounterEl = document.getElementById('question-counter');
+  const livesContainer = document.getElementById('lives-container');
+  const timerTextEl = document.getElementById('timer-text');
+  const timerProgressEl = document.getElementById('timer-progress');
+  const optionsContainer = document.getElementById('options-container');
+  const comboIndicator = document.getElementById('combo-indicator');
+  const feedbackDiv = document.getElementById('feedback');
+
+  function playSound(type) {
+    try {
+      const AudioContext = window.AudioContext || window.webkitAudioContext;
+      if (!AudioContext) return;
+      const ctx = new AudioContext();
+      const osc = ctx.createOscillator();
+      const gain = ctx.createGain();
+      osc.connect(gain);
+      gain.connect(ctx.destination);
+      osc.type = 'sine';
+      if (type === 'correct') {
+        osc.frequency.value = 880;
+        gain.gain.value = 0.3;
+        osc.start();
+        gain.gain.exponentialRampToValueAtTime(0.00001, ctx.currentTime + 0.5);
+        osc.stop(ctx.currentTime + 0.5);
+      } else {
+        osc.frequency.value = 440;
+        gain.gain.value = 0.3;
+        osc.start();
+        gain.gain.exponentialRampToValueAtTime(0.00001, ctx.currentTime + 0.3);
+        osc.stop(ctx.currentTime + 0.3);
+      }
+      setTimeout(() => ctx.close(), 600);
+    } catch(e) { console.warn(e); }
+  }
+
+  function renderLives() {
+    livesContainer.innerHTML = '';
+    for (let i = 0; i < 5; i++) {
+      const heart = document.createElement('span');
+      heart.className = 'heart' + (i >= userLives ? ' heart-lost' : '');
+      heart.textContent = '❤️';
+      livesContainer.appendChild(heart);
+    }
+  }
+
+  function updateComboUI() {
+    comboIndicator.textContent = `🔥 Комбо: ${comboCount}`;
+    comboIndicator.style.background = comboCount >= 3 ? '#fbbf24' : '#fef3c7';
+  }
+
+  function showFeedback(isCorrect, explanation) {
+    feedbackDiv.style.display = 'block';
+    feedbackDiv.className = `feedback ${isCorrect ? 'correct' : 'wrong'}`;
+    if (isCorrect) {
+      feedbackDiv.innerHTML = `<i class="fas fa-check-circle"></i> Правильно! ${explanation ? ' ' + explanation : ''}`;
+    } else {
+      // ❌ НЕ ПОКАЗЫВАЕМ ПРАВИЛЬНЫЙ ОТВЕТ – только сообщение об ошибке
+      feedbackDiv.innerHTML = `<i class="fas fa-times-circle"></i> Неправильно. ${explanation ? ' ' + explanation : 'Попробуйте ещё раз.'}`;
+    }
+    setTimeout(() => {
+      if (feedbackDiv.style.display !== 'none') feedbackDiv.style.display = 'none';
+    }, 2000);
+  }
+
+  function loadQuestion(index) {
+    if (!canAnswer) return;
+    if (index >= totalQuestions) {
+      finishTestSuccess();
+      return;
+    }
+    const q = questionsJson[index];
+    questionTextEl.textContent = q.text;
+    questionCounterEl.textContent = `${index + 1} / ${totalQuestions}`;
+    optionsContainer.innerHTML = '';
+    feedbackDiv.style.display = 'none';
+
+    // Аудио кнопка
+    let audioBtn = document.getElementById('audio-play-btn');
+    if (audioBtn) audioBtn.remove();
+    if (q.audio_url) {
+      const btn = document.createElement('button');
+      btn.id = 'audio-play-btn';
+      btn.style.cssText = 'margin-top: 10px; background: #f1f5f9; border: none; border-radius: 40px; padding: 8px 16px; cursor: pointer; font-size: 0.9rem;';
+      btn.innerHTML = '<i class="fas fa-volume-up"></i> Прослушать';
+      btn.onclick = () => { new Audio(q.audio_url).play(); };
+      document.querySelector('.speech-bubble').appendChild(btn);
+    }
+
+    if (q.question_type === 'choice' || q.question_type === 'audio_choice') {
+      q.options.forEach((optText, idx) => {
+        const btn = document.createElement('button');
+        btn.type = 'button';
+        btn.className = 'option-btn';
+        btn.innerHTML = `
+          <span class="option-letter">${String.fromCharCode(65 + idx)}</span>
+          <span class="option-text">${optText}</span>
+        `;
+        btn.onclick = () => handleOptionClick(btn, idx + 1, q.correct_option, index, q.explanation);
+        optionsContainer.appendChild(btn);
+      });
+    } else if (q.question_type === 'translate') {
+      const input = document.createElement('input');
+      input.type = 'text';
+      input.placeholder = 'Введите перевод...';
+      input.style.cssText = 'width: 100%; padding: 16px; border-radius: 24px; border: 2px solid #e2e8f0; margin-bottom: 16px; font-size: 1rem;';
+      const submitBtn = document.createElement('button');
+      submitBtn.textContent = 'Проверить';
+      submitBtn.className = 'option-btn';
+      submitBtn.style.justifyContent = 'center';
+      submitBtn.onclick = () => {
+        const userAnswer = input.value.trim().toLowerCase();
+        const isCorrect = (userAnswer === q.correct_answer_text.toLowerCase());
+        if (isCorrect) {
+          playSound('correct');
+          showFeedback(true, q.explanation);
+          comboCount++;
+          updateComboUI();
+          setTimeout(() => {
+            currentQuestionIndex++;
+            loadQuestion(currentQuestionIndex);
+          }, 800);
+        } else {
+          playSound('wrong');
+          showFeedback(false, q.explanation);  // правильный ответ не передаём
+          userLives--;
+          renderLives();
+          if (userLives <= 0) {
+            showResultModal(false);
+            return;
+          }
+          comboCount = 0;
+          updateComboUI();
+          setTimeout(() => {
+            loadQuestion(index);
+          }, 1500);
+        }
+      };
+      optionsContainer.appendChild(input);
+      optionsContainer.appendChild(submitBtn);
+    }
+    startTimer(q.time_limit || 30);
+  }
+
+  function handleOptionClick(btnElement, selectedIdx, correctIdx, questionIndex, explanation) {
+    if (!canAnswer) return;
+    canAnswer = false;
+    clearInterval(timerInterval);
+    const isCorrect = (selectedIdx === correctIdx);
+
+    if (isCorrect) {
+      playSound('correct');
+      btnElement.classList.add('correct-glow');
+      showFeedback(true, explanation);
+      comboCount++;
+      updateComboUI();
+      setTimeout(() => {
+        canAnswer = true;
+        currentQuestionIndex++;
+        loadQuestion(currentQuestionIndex);
+      }, 600);
+    } else {
+      playSound('wrong');
+      btnElement.classList.add('wrong-shake');
+      showFeedback(false, explanation);  // правильный ответ не показываем
+      userLives--;
+      renderLives();
+      comboCount = 0;
+      updateComboUI();
+      if (userLives <= 0) {
+        showResultModal(false);
+        return;
+      }
+      setTimeout(() => {
+        btnElement.classList.remove('wrong-shake');
+        canAnswer = true;
+        loadQuestion(questionIndex);
+      }, 1200);
+    }
+  }
+
+  function startTimer(seconds) {
+    if (timerInterval) clearInterval(timerInterval);
+    let timeLeft = seconds;
+    const updateTimerUI = () => {
+      timerTextEl.textContent = timeLeft;
+      const percent = (timeLeft / seconds) * 100;
+      timerProgressEl.style.width = percent + '%';
+      timerProgressEl.classList.remove('warning', 'danger');
+      if (percent <= 30) timerProgressEl.classList.add('danger');
+      else if (percent <= 60) timerProgressEl.classList.add('warning');
+    };
+    updateTimerUI();
+    timerInterval = setInterval(() => {
+      if (!canAnswer) return;
+      timeLeft--;
+      if (timeLeft < 0) timeLeft = 0;
+      updateTimerUI();
+      if (timeLeft <= 0) {
+        clearInterval(timerInterval);
+        if (canAnswer) {
+          canAnswer = false;
+          userLives--;
+          renderLives();
+          showFeedback(false, 'Время вышло!');
+          if (userLives <= 0) {
+            showResultModal(false);
+            return;
+          }
+          setTimeout(() => {
+            canAnswer = true;
+            loadQuestion(currentQuestionIndex);
+          }, 1200);
+        }
+      }
+    }, 1000);
+  }
+
+  function finishTestSuccess() {
+    if (typeof confetti === 'function') {
+      confetti({ particleCount: 300, spread: 90, origin: { y: 0.6 }, colors: ['#10b981', '#fbbf24', '#3b82f6'] });
+    }
+    fetch(`/lesson/${window.lessonId}/test/submit/`, {
+      method: 'POST',
+      headers: { 'X-CSRFToken': window.csrfToken, 'Content-Type': 'application/x-www-form-urlencoded' },
+      body: new URLSearchParams({ 'final_score': '1', 'combo': comboCount })
+    }).then(() => {
+      showResultModal(true);
+    });
+  }
+
+  function showResultModal(success) {
+    const overlay = document.createElement('div');
+    overlay.style.cssText = `
+      position: fixed; inset: 0; background: rgba(0,0,0,0.5);
+      display: flex; align-items: center; justify-content: center;
+      z-index: 1000; backdrop-filter: blur(8px);
+    `;
+    overlay.innerHTML = `
+      <div style="background: white; border-radius: 28px; padding: 32px 40px; text-align: center; max-width: 420px; width: 90%; box-shadow: 0 25px 50px rgba(0,0,0,0.25); border: 3px solid ${success ? '#10b981' : '#ef4444'};">
+        <div style="font-size: 4rem; margin-bottom: 16px;">${success ? '🎉' : '💔'}</div>
+        <h3 style="font-size: 1.8rem; font-weight: 800; margin-bottom: 12px;">${success ? 'Урок пройден!' : 'Попробуйте ещё раз'}</h3>
+        <p style="color: #64748b; margin-bottom: 24px;">${success ? `Отличная работа! Комбо: ${comboCount} 🔥` : 'Не переживайте, практика делает совершенным!'}</p>
+        <button onclick="window.location.href='/course/{{ lesson.course.slug }}/'" style="background: ${success ? '#10b981' : '#ef4444'}; color: white; border: none; padding: 14px 32px; border-radius: 50px; font-weight: 700; cursor: pointer;">${success ? 'Продолжить курс' : 'Вернуться к уроку'}</button>
+      </div>
+    `;
+    document.body.appendChild(overlay);
+    document.body.style.overflow = 'hidden';
+  }
+
+  renderLives();
+  updateComboUI();
+  loadQuestion(0);
+</script>
+{% endblock %}

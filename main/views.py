@@ -206,7 +206,7 @@ def take_test(request, lesson_id):
         messages.error(request, 'Для этого урока ещё нет теста.')
         return redirect('lesson_detail', course_slug=lesson.course.slug, order=lesson.order)
     context = {'lesson': lesson, 'questions': questions}
-    return render(request, 'test.html', context)
+    return render(request, 'test_duo.html', context)
 
 
 @login_required
