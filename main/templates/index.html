@@ -68,10 +68,11 @@
         }
 
         .gold-gradient {
-            background: linear-gradient(135deg, #e8b830, #d4a020);
+            background: linear-gradient(135deg, #78ff9c, #dfff87);
             -webkit-background-clip: text;
             background-clip: text;
             color: transparent;
+            text-shadow: 0 0 30px rgba(120,225,160,0.35);
         }
 
         .btn-primary-custom {
@@ -134,11 +135,6 @@
             backdrop-filter: none;
             padding: 20px 0;
             transition: all 0.3s ease;
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            z-index: 1000;
         }
 
         .navbar.scrolled {
@@ -159,10 +155,44 @@
         }
 
         .hero {
-            padding: 140px 0 80px;
+            padding: 170px 0 120px;
             position: relative;
+            overflow: hidden;
+        }
+        .hero::before {
+            content: "";
+            position: absolute;
+            width: 700px;
+            height: 700px;
+            background: radial-gradient(circle, rgba(120,255,160,0.28) 0%, rgba(120,255,160,0) 70%);
+            top: -250px;
+            right: -180px;
+            z-index: 0;
+            animation: glowFloat 7s ease-in-out infinite;
         }
 
+        .hero::after {
+            content: "";
+            position: absolute;
+            width: 500px;
+            height: 500px;
+            background: radial-gradient(circle, rgba(180,255,120,0.18) 0%, rgba(180,255,120,0) 70%);
+            bottom: -200px;
+            left: -120px;
+            z-index: 0;
+        }
+
+        @keyframes glowFloat {
+            0% {
+                transform: translateY(0px);
+            }
+            50% {
+                transform: translateY(25px);
+            }
+            100% {
+                transform: translateY(0px);
+            }
+        }
         .hero-badge {
             display: inline-block;
             background: rgba(100, 140, 80, 0.2);
@@ -176,30 +206,82 @@
         }
 
         .hero-title {
-            font-size: 3.8rem;
+            font-size: 4.7rem;
             font-weight: 800;
-            line-height: 1.15;
-            margin-bottom: 24px;
-            color: #1a3a1a;
+            line-height: 1.05;
+            margin-bottom: 28px;
+            color: #102010;
+            letter-spacing: -0.04em;
         }
 
         .hero-text {
-            color: #2a4a2a;
-            font-size: 1.1rem;
-            line-height: 1.6;
+            color: #355535;
+            font-size: 1.18rem;
+            line-height: 1.8;
+            max-width: 640px;
         }
 
         .hero-image {
             width: 100%;
-            height: 600px;
+            height: 640px;
             object-fit: cover;
-            border-radius: 32px;
-            box-shadow: 0 20px 35px -10px rgba(0,0,0,0.2);
-            transition: transform 0.3s ease;
+            border-radius: 36px;
             display: block;
+            position: relative;
+            z-index: 2;
+            box-shadow:
+                0 30px 80px rgba(0,0,0,0.18),
+                0 0 60px rgba(120,255,160,0.18);
+            transition: all 0.45s ease;
         }
+
         .hero-image:hover {
-            transform: scale(1.02);
+            transform: scale(1.025) translateY(-6px);
+        }
+
+        .hero-image-wrapper {
+            position: relative;
+        }
+
+        .hero-floating-card {
+            position: absolute;
+            background: rgba(255,255,255,0.72);
+            backdrop-filter: blur(14px);
+            border: 1px solid rgba(255,255,255,0.4);
+            border-radius: 18px;
+            padding: 14px 20px;
+            font-weight: 700;
+            color: #163016;
+            z-index: 3;
+            box-shadow: 0 10px 40px rgba(0,0,0,0.12);
+            animation: floatingCard 4s ease-in-out infinite;
+        }
+
+        .hero-floating-card i {
+            color: #65d86e;
+            margin-right: 8px;
+        }
+
+        .hero-card-1 {
+            top: 40px;
+            left: -30px;
+        }
+
+        .hero-card-2 {
+            bottom: 40px;
+            right: -20px;
+        }
+
+        @keyframes floatingCard {
+            0% {
+                transform: translateY(0px);
+            }
+            50% {
+                  transform: translateY(-12px);
+            }
+            100% {
+                  transform: translateY(0px);
+            }
         }
 
         .hero .row {
@@ -547,6 +629,19 @@
             font-size: 1.1rem;
         }
         @media (max-width: 768px) {
+        .hero-title {
+            font-size: 3rem;
+        }
+
+        .hero-image {
+            height: 420px;
+            margin-top: 20px;
+        }
+
+        .hero-card-1,
+        .hero-card-2 {
+            transform: scale(0.9);
+        }
             .section-title { font-size: 1.8rem; }
             .section-subtitle { font-size: 1rem; }
         }
@@ -639,7 +734,7 @@
     </div>
 </nav>
 
-<!-- Модальное окно входа (исправленное) -->
+<!-- Модальное окно входа -->
 <div class="modal fade" id="loginModal" tabindex="-1">
     <div class="modal-dialog modal-dialog-centered">
         <div class="modal-content bg-white text-dark rounded-4">
@@ -662,7 +757,7 @@
     </div>
 </div>
 
-<!-- Модальное окно регистрации (исправленное) -->
+<!-- Модальное окно регистрации -->
 <div class="modal fade" id="registerModal" tabindex="-1">
     <div class="modal-dialog modal-dialog-centered">
         <div class="modal-content bg-white text-dark rounded-4">
@@ -700,7 +795,23 @@
                 </div>
             </div>
             <div class="col-lg-5 mt-5 mt-lg-0">
-                <!-- здесь может быть картинка -->
+                <div class="hero-image-wrapper">
+                    <img
+                        src="https://images.unsplash.com/photo-1522202176988-66273c2fd55f?q=80&amp;w=1400&amp;auto=format&amp;fit=crop"
+                        class="hero-image"
+                        alt="AI Learning"
+                    >
+
+                    <div class="hero-floating-card hero-card-1">
+                        <i class="fas fa-bolt"></i>
+                        AI powered
+                    </div>
+
+                    <div class="hero-floating-card hero-card-2">
+                        <i class="fas fa-language"></i>
+                        Татарча + AI
+                    </div>
+                </div>
             </div>
         </div>
     </div>
@@ -980,24 +1091,14 @@
     closeChat.addEventListener('click', () => {
         chatPopup.style.display = 'none';
     });
-    // Открытие чата по кнопке (если есть)
-    const openChatBtn = document.getElementById('openChatBtn');
-    if (openChatBtn) {
-        openChatBtn.addEventListener('click', () => {
-            chatPopup.style.display = 'flex';
-            const messages = document.querySelectorAll('#chatMessages .justify-content-start');
-            if (messages.length === 0 || !messages[0].innerText.includes('Исәнмесез')) {
-                addMessage("Исәнмесез! Я AI-репетитор. Помогу вам выучить татарский язык. Спрашивайте! 😊", false);
-            }
-        });
-    }
+
     // Обработчики для карточек сообществ, кланов и достижений
     document.querySelectorAll('.community-card, .clan-card, .achievement-item').forEach(el => {
         el.addEventListener('click', () => {
             if (!el.classList.contains('unlocked') && el.classList.contains('achievement-item')) {
                 alert('🔒 Выполните уроки, чтобы открыть это достижение!');
             } else {
-                if (!{% if user.is_authenticated %}true{% else %}false{% endif %}) {
+                if (! {% if user.is_authenticated %} true {% else %} false {% endif %} ) {
                     new bootstrap.Modal(document.getElementById('registerModal')).show();
                 } else {
                     alert('🌟 Функция скоро появится!');
