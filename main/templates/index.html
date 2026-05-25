@@ -1,3 +1,4 @@
+
 {% load static %}
 <!DOCTYPE html>
 <html lang="ru">
@@ -18,321 +19,328 @@
 
         body {
             font-family: 'Inter', sans-serif;
-            background: #F8F9FA;
+            background: #f5f8f2;
             color: #1a3a1a;
             overflow-x: hidden;
             position: relative;
         }
 
-        /* Татарский узор с тюльпанами на фоне - чуть темнее */
-        body::before {
-            content: "";
+        /* ----- СЛОИ ФОНА: кремль справа, ярче и выше ----- */
+        .background-layer {
             position: fixed;
             top: 0;
             left: 0;
             width: 100%;
             height: 100%;
-            background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Cpath fill='%239bc49b' fill-opacity='0.08' d='M50,15 L55,25 L65,28 L58,38 L60,48 L50,42 L40,48 L42,38 L35,28 L45,25 Z M30,55 L35,65 L45,68 L38,78 L40,88 L30,82 L20,88 L22,78 L15,68 L25,65 Z M70,55 L75,65 L85,68 L78,78 L80,88 L70,82 L60,88 L62,78 L55,68 L65,65 Z'/%3E%3C/svg%3E");
-            background-repeat: repeat;
-            background-size: 180px 180px;
-            pointer-events: none;
             z-index: 0;
+            pointer-events: none;
         }
-
-        .video-background {
-            display: none;
+        .architecture {
+            position: absolute;
+            bottom: 15%;
+            right: 0;
+            width: 60%;
+            max-width: 800px;
+            height: auto;
+            z-index: 0;
+            text-align: right;
+            opacity: 0.7;
         }
-
-        .overlay-gradient {
-            position: fixed;
-            top: 0;
-            left: 0;
+        .architecture img {
             width: 100%;
-            height: 100%;
-            background: linear-gradient(135deg, rgba(200, 230, 192, 0.6) 0%, rgba(160, 200, 150, 0.4) 100%);
-            z-index: -1;
+            height: auto;
+            filter: none;
         }
 
-        .container-custom {
-            max-width: 1280px;
-            margin: 0 auto;
-            padding: 0 24px;
+        /* ----- КОНТЕЙНЕР ВСЕГО КОНТЕНТА ----- */
+        .main-container {
             position: relative;
-            z-index: 1;
+            z-index: 10;
+            width: 100%;
         }
 
-        h1, h2, h3, .heading {
-            font-weight: 700;
-            letter-spacing: -0.02em;
-            color: #1a3a1a;
-        }
-
-        .gold-gradient {
-            background: linear-gradient(135deg, #78ff9c, #dfff87);
-            -webkit-background-clip: text;
-            background-clip: text;
-            color: transparent;
-            text-shadow: 0 0 30px rgba(120,225,160,0.35);
-        }
-
-        .btn-primary-custom {
-            background: linear-gradient(135deg, #c8e0b5, #b0d0a0);
-            border: none;
-            color: #1a3a1a;
-            font-weight: 700;
-            padding: 14px 36px;
-            border-radius: 12px;
-            transition: all 0.3s;
-            box-shadow: 0 4px 15px rgba(100, 140, 80, 0.3);
-            text-decoration: none !important;
-        }
-        .btn-primary-custom:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 12px 28px rgba(100, 140, 80, 0.4);
-            background: linear-gradient(135deg, #d8e8c5, #c0e0b0);
-        }
-
-        .btn-outline-custom {
+        /* Навигация — все элементы в одну строку без переноса, сдвинута левее, поднята выше */
+        .navbar-custom {
             background: transparent;
-            border: 2px solid #6a8a5a;
-            color: #1a3a1a;
-            font-weight: 600;
-            padding: 12px 32px;
-            border-radius: 12px;
-            transition: all 0.2s;
-            text-decoration: none !important;
+            padding: 8px 0;
+            transition: all 0.3s ease;
+            position: relative;
+            z-index: 20;
         }
-        .btn-outline-custom:hover {
-            background: rgba(100, 140, 80, 0.15);
-            transform: translateY(-2px);
-            border-color: #5a7a4a;
-            color: #1a3a1a;
+        .navbar-custom .container-custom {
+            width: 100%;
+            max-width: none;
+            margin: 0;
+            padding: 0 32px;
+            padding-left: 10px;
+            position: relative;
+            transform: none;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: nowrap;
         }
-
+        .navbar-custom.scrolled {
+            background: rgba(255, 255, 255, 0.85);
+            backdrop-filter: blur(12px);
+            padding: 8px 0;
+            border-bottom: 1px solid rgba(0,0,0,0.1);
+        }
+        .navbar-brand {
+            font-size: 1.8rem;
+            font-weight: 800;
+            color: #2c5e2e;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            white-space: nowrap;
+        }
+        .navbar-brand img {
+            height: 90px;
+            width: auto;
+        }
+        .nav-links {
+            display: flex;
+            gap: 8px;
+            align-items: center;
+            flex-wrap: nowrap;
+        }
+        .nav-links a {
+            color: #1a3a1a;
+            font-weight: 500;
+            font-size: 1rem;
+            transition: 0.2s;
+            text-decoration: none;
+            white-space: nowrap;
+        }
+        .nav-links a:hover {
+            color: #6a8a5a;
+        }
         .lang-btn {
             background: transparent;
             border: 1px solid rgba(80, 110, 70, 0.5);
             color: #1a3a1a;
-            padding: 8px 20px;
+            padding: 4px 10px;
             border-radius: 40px;
-            font-size: 0.9rem;
+            font-size: 1rem;
             font-weight: 500;
             transition: all 0.2s;
             cursor: pointer;
-        }
-        .lang-btn:hover {
-            background: rgba(100, 140, 80, 0.2);
-            border-color: #6a8a5a;
+            white-space: nowrap;
         }
         .lang-btn.active {
             background: #6a8a5a;
             color: white;
             border-color: #6a8a5a;
         }
+        .btn-outline-light-custom {
+            border: 2px solid #6a8a5a;
+            background: white;
+            color: #1a3a1a;
+            padding: 6px 18px;
+            border-radius: 40px;
+            font-size: 0.9rem;
+            font-weight: 600;
+            transition: 0.2s;
+            text-decoration: none;
+            white-space: nowrap;
+        }
+        .btn-outline-light-custom:hover {
+            background: #6a8a5a;
+            color: white;
+        }
+        .btn-primary-custom {
+            background: linear-gradient(135deg, #7cb342, #558b2f);
+            border: none;
+            color: white;
+            font-weight: 700;
+            padding: 6px 18px;
+            font-size: 0.9rem;
+            border-radius: 40px;
+            transition: all 0.3s;
+            box-shadow: 0 4px 12px rgba(124,179,66,0.3);
+            text-decoration: none;
+            white-space: nowrap;
+        }
+        .btn-primary-custom:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 18px rgba(124,179,66,0.4);
+            color: white;
+        }
+        /* Специально для кнопки "Начать обучение" в карточке курса — сделать чуть больше */
+        .course-sale .btn-primary-custom {
+            padding: 8px 24px;
+            font-size: 1rem;
+        }
+        .user-stats {
+            display: flex;
+            gap: 10px;
+            align-items: center;
+            margin-right: 8px;
+            white-space: nowrap;
+        }
+        .stat-item {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            font-weight: 600;
+            color: #1a3a1a;
+            font-size: 1rem;
+        }
+        .stat-item i {
+            color: #e8b830;
+            font-size: 1rem;
+        }
+        .text-dark {
+            font-size: 1rem;
+            white-space: nowrap;
+        }
 
-        .navbar {
+        /* Левый текстовый блок — сдвинут чуть левее, буквы крупнее */
+        .hero-text-block {
             background: transparent;
             backdrop-filter: none;
-            padding: 20px 0;
-            transition: all 0.3s ease;
-        }
-
-        .navbar.scrolled {
-            background: rgba(200, 230, 192, 0.85);
-            backdrop-filter: blur(12px);
-            padding: 12px 0;
-            border-bottom: 1px solid rgba(80, 110, 70, 0.3);
+            border-radius: 0;
+            padding: 32px 40px;
+            max-width: 780px;
+            margin-top: 60px;
+            margin-left: 0px;
             box-shadow: none;
-        }
-
-        .navbar-brand {
-            font-size: 1.8rem;
-            font-weight: 800;
-            color: #1a3a1a;
-        }
-        .navbar-brand i {
-            color: #6a8a5a;
-        }
-
-        .hero {
-            padding: 170px 0 120px;
-            position: relative;
-            overflow: hidden;
-        }
-        .hero::before {
-            content: "";
-            position: absolute;
-            width: 700px;
-            height: 700px;
-            background: radial-gradient(circle, rgba(120,255,160,0.28) 0%, rgba(120,255,160,0) 70%);
-            top: -250px;
-            right: -180px;
-            z-index: 0;
-            animation: glowFloat 7s ease-in-out infinite;
-        }
-
-        .hero::after {
-            content: "";
-            position: absolute;
-            width: 500px;
-            height: 500px;
-            background: radial-gradient(circle, rgba(180,255,120,0.18) 0%, rgba(180,255,120,0) 70%);
-            bottom: -200px;
-            left: -120px;
-            z-index: 0;
-        }
-
-        @keyframes glowFloat {
-            0% {
-                transform: translateY(0px);
-            }
-            50% {
-                transform: translateY(25px);
-            }
-            100% {
-                transform: translateY(0px);
-            }
+            border: none;
         }
         .hero-badge {
             display: inline-block;
-            background: rgba(100, 140, 80, 0.2);
-            padding: 8px 20px;
+            background: rgba(100, 140, 80, 0.15);
+            padding: 6px 16px;
             border-radius: 100px;
             font-size: 0.9rem;
             font-weight: 500;
             color: #1a3a1a;
-            margin-bottom: 24px;
-            backdrop-filter: blur(4px);
+            margin-bottom: 20px;
         }
-
         .hero-title {
-            font-size: 4.7rem;
+            font-size: 3.5rem;
             font-weight: 800;
-            line-height: 1.05;
-            margin-bottom: 28px;
-            color: #102010;
-            letter-spacing: -0.04em;
+            line-height: 1.2;
+            margin-bottom: 20px;
+            color: #1a3a1a;
         }
-
+        .hero-title span {
+            background: linear-gradient(135deg, #e8b830, #d4a020);
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+        }
         .hero-text {
-            color: #355535;
-            font-size: 1.18rem;
-            line-height: 1.8;
-            max-width: 640px;
+            font-size: 1.1rem;
+            line-height: 1.5;
+            color: #2a4a2a;
+            margin-bottom: 28px;
         }
-
-        .hero-image {
-            width: 100%;
-            height: 640px;
-            object-fit: cover;
-            border-radius: 36px;
-            display: block;
-            position: relative;
-            z-index: 2;
-            box-shadow:
-                0 30px 80px rgba(0,0,0,0.18),
-                0 0 60px rgba(120,255,160,0.18);
-            transition: all 0.45s ease;
-        }
-
-        .hero-image:hover {
-            transform: scale(1.025) translateY(-6px);
-        }
-
-        .hero-image-wrapper {
-            position: relative;
-        }
-
-        .hero-floating-card {
-            position: absolute;
-            background: rgba(255,255,255,0.72);
-            backdrop-filter: blur(14px);
-            border: 1px solid rgba(255,255,255,0.4);
-            border-radius: 18px;
-            padding: 14px 20px;
+        .btn-hero {
+            background: linear-gradient(135deg, #7cb342, #558b2f);
+            padding: 14px 36px;
+            font-size: 1.1rem;
+            border-radius: 50px;
+            color: white;
             font-weight: 700;
-            color: #163016;
-            z-index: 3;
-            box-shadow: 0 10px 40px rgba(0,0,0,0.12);
-            animation: floatingCard 4s ease-in-out infinite;
+            display: inline-flex;
+            align-items: center;
+            gap: 10px;
+            transition: 0.3s;
+            text-decoration: none;
+            border: none;
+        }
+        .btn-hero:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 15px 25px -8px rgba(124,179,66,0.5);
+            color: white;
         }
 
-        .hero-floating-card i {
-            color: #65d86e;
-            margin-right: 8px;
+        /* Дракон — изначально большой (3 раза больше стандартного 350px = 1050px, но для адекватности 600px) */
+        .dragon-front {
+            position: fixed;
+            bottom: 20px;
+            right: -50px;
+            width: 500px;               /* большой размер (в 3 раза больше исходного? исходный 350px, 3 раза 1050px — слишком огромно, делаем 600px) */
+            max-width: 55vw;
+            z-index: 100;
+            cursor: pointer;
+            filter: drop-shadow(0 8px 16px rgba(0,0,0,0.15));
+            transition: width 0.3s ease, max-width 0.3s ease, right 0.3s ease;
+        }
+        .dragon-front.small {
+            width: 350px;               /* уменьшенный размер */
+            max-width: 45vw;
+            right: -50px;
+        }
+        .dragon-front:hover {
+            transform: scale(1.03);
         }
 
-        .hero-card-1 {
-            top: 40px;
-            left: -30px;
+        /* Чат-поп-ап — теперь слева и ниже */
+        .chat-popup {
+            position: fixed;
+            bottom: 100px;              /* ниже, чем было (220px) */
+            left: 825px;                /* левее */
+            width: 360px;
+            background: rgba(255,255,255,0.98);
+            border-radius: 28px;
+            box-shadow: 0 25px 50px rgba(0,0,0,0.2);
+            display: none;
+            flex-direction: column;
+            overflow: hidden;
+            z-index: 999;
+            border: 1px solid rgba(100,140,80,0.3);
         }
-
-        .hero-card-2 {
-            bottom: 40px;
-            right: -20px;
-        }
-
-        @keyframes floatingCard {
-            0% {
-                transform: translateY(0px);
-            }
-            50% {
-                  transform: translateY(-12px);
-            }
-            100% {
-                  transform: translateY(0px);
-            }
-        }
-
-        .hero .row {
+        .chat-header {
+            background: linear-gradient(135deg, #c8e0b5, #b0d0a0);
+            padding: 14px 20px;
+            color: #1a3a1a;
+            font-weight: 700;
             display: flex;
-            flex-wrap: wrap;
-            margin-right: 0px;
-            margin-left: 0px;
+            justify-content: space-between;
+            align-items: center;
+            cursor: pointer;
         }
-
-        .hero .col-lg-7 {
-            flex: 0 0 58.333333%;
-            max-width: 58.333333%;
-            position: relative;
-            width: 100%;
-            padding-right: 15px;
-            padding-left: 15px;
+        .chat-messages {
+            height: 300px;
+            overflow-y: auto;
+            padding: 16px;
+            background: #fafdf8;
         }
-
-        .hero .col-lg-5 {
-            flex: 0 0 41.666667%;
-            max-width: 41.666667%;
-            position: relative;
-            width: 100%;
-            padding-right: 0;
-            padding-left: 15px;
+        .chat-input-area {
             display: flex;
-            align-items: stretch;
+            gap: 10px;
+            padding: 16px;
+            border-top: 1px solid #e0e8dc;
+            background: white;
+        }
+        .chat-input {
+            flex: 1;
+            border-radius: 40px;
+            padding: 10px 16px;
+            border: 1px solid #d0dcd0;
+            outline: none;
+            background: #fafdf8;
         }
 
-        .hero .container-custom {
-            overflow: visible;
+        /* Карточки курсов, сообществ — сдвинуты вправо (оставляем как было) */
+        .content-wrapper {
+            margin-left: 60px;
         }
-
         .card-glass {
-            background: rgba(255, 255, 255, 0.5);
-            backdrop-filter: blur(8px);
-            border-radius: 32px;
-            border: 1px solid rgba(100, 140, 80, 0.3);
+            background: rgba(255, 255, 255, 0.9);
+            backdrop-filter: blur(4px);
+            border-radius: 28px;
+            border: 1px solid rgba(100,140,80,0.2);
             transition: all 0.3s ease;
-            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.05);
         }
-        .card-glass:hover {
-            transform: translateY(-6px);
-            background: rgba(255, 255, 255, 0.7);
-            border-color: #8aaa7a;
-            box-shadow: 0 12px 28px rgba(0, 0, 0, 0.1);
-        }
-
         .course-sale {
-            background: linear-gradient(135deg, rgba(200, 230, 180, 0.8), rgba(180, 210, 160, 0.9));
-            border: 2px solid #8aaa7a;
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(4px);
+            border-radius: 28px;
+            border: 1px solid rgba(100,140,80,0.3);
             position: relative;
             overflow: hidden;
         }
@@ -342,7 +350,7 @@
             right: -35px;
             background: #e8b830;
             color: #1a3a1a;
-            padding: 8px 40px;
+            padding: 6px 40px;
             transform: rotate(45deg);
             font-weight: 800;
             font-size: 0.8rem;
@@ -357,11 +365,22 @@
             font-weight: 800;
             color: #4a6a3a;
         }
-
-        .communities-section {
-            margin: 40px 0 80px 0;
-            position: relative;
-            overflow: hidden;
+        .btn-outline-custom {
+            background: transparent;
+            border: 2px solid #6a8a5a;
+            color: #1a3a1a;
+            font-weight: 600;
+            padding: 12px 32px;
+            border-radius: 12px;
+            transition: all 0.2s;
+            text-decoration: none;
+            display: inline-block;
+        }
+        .btn-outline-custom:hover {
+            background: rgba(100, 140, 80, 0.1);
+            transform: translateY(-2px);
+            border-color: #5a7a4a;
+            color: #1a3a1a;
         }
         .communities-wrapper {
             position: relative;
@@ -396,83 +415,54 @@
         }
         .swiper-button-prev-comm { left: 0; }
         .swiper-button-next-comm { right: 0; }
-        .swiper-button-prev-comm:hover, .swiper-button-next-comm:hover {
-            background: #6a8a5a;
-            transform: translateY(-50%) scale(1.08);
-        }
         .community-card {
-            background: rgba(255, 255, 255, 0.5);
-            backdrop-filter: blur(8px);
+            background: rgba(255, 255, 255, 0.85);
+            backdrop-filter: blur(4px);
             border-radius: 28px;
-            padding: 32px 24px;
+            padding: 24px;
             text-align: center;
             transition: all 0.3s;
-            border: 1px solid rgba(100, 140, 80, 0.3);
+            border: 1px solid rgba(100, 140, 80, 0.2);
             cursor: pointer;
-            color: #1a3a1a;
             height: 100%;
         }
         .community-card:hover {
             transform: translateY(-6px);
             border-color: #8aaa7a;
-            background: rgba(255, 255, 255, 0.7);
-            box-shadow: 0 8px 20px rgba(0,0,0,0.1);
+            background: rgba(255, 255, 255, 0.95);
         }
         .community-icon {
-            width: 90px;
-            height: 90px;
-            background: rgba(100, 140, 80, 0.2);
+            width: 70px;
+            height: 70px;
+            background: rgba(100, 140, 80, 0.15);
             border-radius: 28px;
             display: flex;
             align-items: center;
             justify-content: center;
             margin: 0 auto 20px;
-            font-size: 2.2rem;
+            font-size: 2rem;
             color: #6a8a5a;
         }
-        .community-card h5 {
-            font-size: 1.3rem;
-            margin-bottom: 12px;
-            font-weight: 600;
-            color: #1a3a1a;
-        }
-        .community-card p {
-            font-size: 0.95rem;
-            margin-bottom: 14px;
-            color: #2a4a2a;
-        }
-
-        @media (max-width: 768px) {
-            .communities-wrapper { padding: 0 40px; }
-            .swiper-communities .swiper-slide { width: 280px; }
-            .community-card { padding: 24px 18px; }
-            .community-icon { width: 70px; height: 70px; font-size: 1.8rem; }
-            .community-card h5 { font-size: 1.1rem; }
-        }
-        @media (max-width: 550px) {
-            .communities-wrapper { padding: 0 30px; }
-            .swiper-communities .swiper-slide { width: 250px; }
-        }
-
         .clans-section {
-            background: rgba(200, 230, 180, 0.5);
+            background: rgba(200, 230, 180, 0.2);
             border-radius: 48px;
             padding: 40px;
-            margin: 20px 0 40px 0;
-            border: 1px solid rgba(100, 140, 80, 0.3);
+            margin: 40px 0;
+            border: 1px solid rgba(100, 140, 80, 0.2);
         }
         .clan-card {
-            background: rgba(255, 255, 255, 0.4);
+            background: rgba(255, 255, 255, 0.6);
             border-radius: 24px;
             padding: 20px;
             transition: 0.3s;
             cursor: pointer;
             border: 1px solid rgba(100, 140, 80, 0.2);
+            margin-bottom: 12px;
         }
         .clan-card:hover {
             border-color: #8aaa7a;
             transform: translateY(-4px);
-            background: rgba(255, 255, 255, 0.6);
+            background: rgba(255, 255, 255, 0.8);
         }
         .clan-rank {
             font-size: 1.5rem;
@@ -484,14 +474,13 @@
             font-weight: 700;
             color: #1a3a1a;
         }
-
         .achievements-grid {
             display: grid;
             grid-template-columns: repeat(auto-fill, minmax(100px, 1fr));
             gap: 16px;
         }
         .achievement-item {
-            background: rgba(255, 255, 255, 0.4);
+            background: rgba(255, 255, 255, 0.6);
             border-radius: 20px;
             padding: 16px;
             text-align: center;
@@ -503,121 +492,9 @@
             opacity: 0.6;
         }
         .achievement-item.unlocked {
-            background: rgba(100, 140, 80, 0.25);
+            background: rgba(100, 140, 80, 0.2);
             border-color: #8aaa7a;
         }
-        .achievement-icon {
-            font-size: 2rem;
-            margin-bottom: 8px;
-        }
-        .achievement-name {
-            font-size: 0.7rem;
-            color: #2a4a2a;
-        }
-
-        .ai-widget {
-            position: fixed;
-            bottom: 30px;
-            right: 5px;
-            z-index: 1000;
-        }
-        .ai-dino {
-            width: 310px;
-            cursor: pointer;
-            filter: drop-shadow(0 10px 20px rgba(0,0,0,0.2)) brightness(1.1) contrast(0.7) saturate(0.5) hue-rotate(15deg);
-            transition: all 0.3s;
-            animation: float 3s ease-in-out infinite;
-        }
-        @keyframes float {
-            0%, 100% { transform: translateY(0); }
-            50% { transform: translateY(-10px); }
-        }
-        .ai-dino:hover {
-            transform: scale(1.05) rotate(3deg);
-        }
-
-        .chat-popup {
-            position: fixed;
-            bottom: 160px;
-            right: 30px;
-            width: 380px;
-            max-width: calc(100vw - 40px);
-            background: rgba(255, 255, 255, 0.95);
-            border-radius: 28px;
-            box-shadow: 0 25px 50px rgba(0,0,0,0.25);
-            display: none;
-            flex-direction: column;
-            overflow: hidden;
-            z-index: 999;
-            border: 1px solid rgba(100, 140, 80, 0.5);
-            animation: slideIn 0.25s ease;
-        }
-        @keyframes slideIn {
-            from { opacity: 0; transform: translateY(20px); }
-            to { opacity: 1; transform: translateY(0); }
-        }
-        .chat-header {
-            background: linear-gradient(135deg, #c8e0b5, #b0d0a0);
-            padding: 16px 20px;
-            color: #1a3a1a;
-            font-weight: 700;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            cursor: pointer;
-        }
-        .chat-messages {
-            height: 340px;
-            overflow-y: auto;
-            padding: 16px;
-            background: #f0f5ec;
-        }
-        .chat-input-area {
-            display: flex;
-            gap: 10px;
-            padding: 16px;
-            border-top: 1px solid rgba(100, 140, 80, 0.2);
-            background: white;
-        }
-        .chat-input {
-            flex: 1;
-            border: 1px solid rgba(100, 140, 80, 0.3);
-            border-radius: 40px;
-            padding: 10px 16px;
-            outline: none;
-            background: #f0f5ec;
-            color: #1a3a1a;
-        }
-        .chat-input:focus {
-            border-color: #8aaa7a;
-        }
-        .typing-indicator {
-            display: inline-block;
-            padding: 12px 18px;
-            background: #e0ecdc;
-            border-radius: 20px;
-            color: #6a8a5a;
-            font-size: 0.9rem;
-        }
-        .typing-indicator span {
-            animation: blink 1.4s infinite;
-        }
-        @keyframes blink {
-            0%, 100% { opacity: 0.2; }
-            50% { opacity: 1; }
-        }
-        @media (max-width: 550px) {
-            .chat-popup { width: 320px; right: 10px; bottom: 130px; }
-            .ai-dino { width: 200px; }
-        }
-
-        footer {
-            background: rgba(180, 210, 160, 0.7);
-            color: #1a3a1a;
-            margin-top: 60px;
-            border-top: 1px solid rgba(100, 140, 80, 0.3);
-        }
-
         .section-title {
             font-size: 2.3rem;
             font-weight: 700;
@@ -628,70 +505,74 @@
             color: #2a4a2a;
             font-size: 1.1rem;
         }
+        footer {
+            background: rgba(30, 50, 30, 0.05);
+            color: #2a4a2a;
+            margin-top: 80px;
+            padding: 40px 0 20px;
+            position: relative;
+            z-index: 5;
+            border-top: 1px solid rgba(100,140,80,0.2);
+        }
+        footer a {
+            color: #4a6a3a;
+            text-decoration: none;
+        }
+        .container-custom {
+            max-width: 1280px;
+            margin: 0 auto;
+            padding: 0 24px;
+            position: relative;
+        }
+        .content-wrapper .container-custom {
+            transform: none;
+        }
+
+        @media (max-width: 992px) {
+            .hero-text-block { max-width: 100%; margin-top: 40px; padding: 24px 28px; margin-left: 20px; }
+            .hero-title { font-size: 2.8rem; }
+            .nav-links { gap: 6px; }
+            .nav-links a { font-size: 0.9rem; }
+            .navbar-brand { font-size: 1.4rem; }
+            .dragon-front { width: 500px; }
+            .dragon-front.small { width: 300px; }
+            .navbar-custom .container-custom { padding-left: 30px; }
+            .content-wrapper { margin-left: 40px; }
+        }
         @media (max-width: 768px) {
-        .hero-title {
-            font-size: 3rem;
+            .dragon-front { width: 400px; right: -30px; }
+            .dragon-front.small { width: 220px; right: -20px; }
+            .hero-text-block { background: transparent; margin: 30px 0; margin-left: 15px; }
+            .hero-title { font-size: 2rem; }
+            .nav-links { display: none; }
+            .navbar-custom .container-custom { padding: 0 16px; padding-left: 20px; flex-wrap: wrap; }
+            .chat-popup { width: 300px; left: 10px; bottom: 80px; }
+            .content-wrapper { margin-left: 20px; }
         }
-
-        .hero-image {
-            height: 420px;
-            margin-top: 20px;
-        }
-
-        .hero-card-1,
-        .hero-card-2 {
-            transform: scale(0.9);
-        }
-            .section-title { font-size: 1.8rem; }
-            .section-subtitle { font-size: 1rem; }
-        }
-
-        a, a:hover, a:visited, .btn, .nav-link, button, .btn-outline-custom, .btn-primary-custom, .navbar-brand, .lang-btn {
-            text-decoration: none !important;
-        }
-
-        .user-stats {
-            display: flex;
-            gap: 12px;
-            align-items: center;
-            margin-right: 10px;
-        }
-        .stat-item {
-            display: flex;
-            align-items: center;
-            gap: 4px;
-            font-weight: 600;
-            color: #1a3a1a;
-        }
-        .stat-item i {
-            color: #e8b830;
-        }
-
-        .corner-image {
-            position: fixed;
-            top: 20px;
-            right: -150px;
-            width: 600px;
-            height: 300px;
-            transform: rotate(45deg);
-            z-index: 100;
-            opacity: 0.7;
-            pointer-events: none;
+        @media (max-width: 550px) {
+            .dragon-front { width: 280px; right: -20px; }
+            .dragon-front.small { width: 160px; }
+            .hero-title { font-size: 1.9rem; }
+            .chat-popup { width: 280px; left: 10px; bottom: 70px; }
+            .content-wrapper { margin-left: 10px; }
+            .navbar-custom .container-custom { padding-left: 15px; }
+            .hero-text-block { margin-left: 10px; }
         }
     </style>
 </head>
 <body>
 
-<div class="overlay-gradient"></div>
-
-<div class="ai-widget">
-    <img src="https://i.imgur.com/mrrNTcQ.png"
-         alt="ИИ помощник"
-         class="ai-dino"
-         id="dinoBtn"
-         style="width: 310px; height: auto;">
+<!-- Фоновые слои: кремль справа, ярче, выше -->
+<div class="background-layer">
+    <div class="architecture">
+        <img src="https://i.imgur.com/wfepIyq.png" alt="Казанский Кремль">
+    </div>
 </div>
 
+<!-- Дракон переднего плана (увеличен, сдвинут правее) -->
+<img src="https://i.imgur.com/swvWgEt.png" class="dragon-front" id="dinoBtn" alt="Дракон TatarSkill">
+
+<!-- Чат-поп-ап (слева, ниже) -->
 <div class="chat-popup" id="chatPopup">
     <div class="chat-header" id="closeChat">
         <span><i class="fas fa-robot me-2"></i> ИИ-репетитор · Татарча</span>
@@ -699,8 +580,8 @@
     </div>
     <div class="chat-messages" id="chatMessages">
         <div class="d-flex mb-2 justify-content-start">
-            <div class="p-3 rounded-4" style="max-width: 85%; background: #e0ecdc; color: #1a3a1a; font-size: 0.95rem;">
-                ✨ Исәнмесез! Я AI-репетитор. Помогу вам освоить татарский язык, объясню грамматику и помогу с произношением. Спрашивайте смело!
+            <div class="p-3 rounded-4" style="max-width:85%; background:#e0ecdc; color:#1a3a1a;">
+                ✨ Исәнмесез! Я AI-репетитор. Помогу вам освоить татарский язык, объясню грамматику и помогу с произношением.
             </div>
         </div>
     </div>
@@ -710,31 +591,185 @@
     </div>
 </div>
 
-<nav class="navbar fixed-top" id="navbar">
-    <div class="container-custom d-flex justify-content-between align-items-center w-100">
-        <a class="navbar-brand" href="/"><i class="fas fa-crown me-2"></i>TatarSkill</a>
-        <div class="d-flex gap-2 align-items-center">
-            <button class="lang-btn active" id="langRu">Рус</button>
-            <button class="lang-btn" id="langTt">Тат</button>
-            {% if user.is_authenticated %}
-                <div class="user-stats">
-                    <span class="stat-item"><i class="fas fa-star"></i> {{ user.profile.total_points|default:0 }}</span>
-                    <span class="stat-item"><i class="fas fa-coins"></i> {{ user.profile.coins|default:0 }}</span>
+<!-- Весь контент (навигация, текст, курсы) -->
+<div class="main-container">
+    <nav class="navbar-custom" id="navbar">
+        <div class="container-custom d-flex justify-content-between align-items-center w-100">
+            <a class="navbar-brand" href="/">
+                <img src="https://i.imgur.com/4IICdD4.png" alt="лого">
+                TatarSkill
+            </a>
+            <div class="nav-links">
+                <a href="/">Главная</a>
+                <a href="{% url 'all_communities' %}">Сообщества</a>
+                <a href="{% url 'all_courses' %}">Курсы</a>
+                <a href="#">Квесты</a>
+                <a href="#">Маршруты</a>
+                <a href="#">Культура</a>
+            </div>
+            <div class="d-flex gap-2 align-items-center">
+                <button class="lang-btn active" id="langRu">Рус</button>
+                <button class="lang-btn" id="langTt">Тат</button>
+                {% if user.is_authenticated %}
+                    <div class="user-stats">
+                        <span class="stat-item"><i class="fas fa-star"></i> {{ user.profile.total_points|default:0 }}</span>
+                        <span class="stat-item"><i class="fas fa-coins"></i> {{ user.profile.coins|default:0 }}</span>
+                    </div>
+                    <span class="text-dark me-2">{{ user.username }}</span>
+                    <a href="{% url 'profile' %}" class="btn-outline-light-custom">Профиль</a>
+                    <a href="{% url 'logout' %}" class="btn-outline-light-custom">Выйти</a>
+                {% else %}
+                    <a href="{% url 'login' %}" class="btn-outline-light-custom">Войти</a>
+                    <a href="{% url 'register' %}" class="btn-primary-custom">Регистрация</a>
+                {% endif %}
+            </div>
+        </div>
+    </nav>
+
+    <div class="content-wrapper">
+        <!-- Текстовый блок (прозрачный фон) -->
+        <div class="hero-text-block">
+            <div class="hero-badge">✨ AI-репетитор говорит по-татарски</div>
+            <h1 class="hero-title">Учись <span>на родном языке</span><br>с интеллектуальным помощником 24/7</h1>
+            <p class="hero-text">Искусственный интеллект помогает с произношением, создает персональные заметки, а сообщества и кланы открывают возможности для живого общения и совместного обучения.</p>
+            <div class="mt-3">
+                {% if user.is_authenticated %}
+                    <a href="{% url 'education' %}" class="btn-hero">Поступить на курсы →</a>
+                {% else %}
+                    <button class="btn-hero" data-bs-toggle="modal" data-bs-target="#registerModal">Поступить на курсы →</button>
+                {% endif %}
+            </div>
+        </div>
+
+        <!-- Курсы -->
+        <section id="courses" class="py-5">
+            <div class="text-center mb-4">
+                <h2 class="section-title">Наши курсы</h2>
+                <p class="section-subtitle">Начните изучение уже сегодня</p>
+            </div>
+            <div class="row g-4">
+                <div class="col-lg-6">
+                    <div class="course-sale p-4">
+                        <div class="sale-badge">🔥 АКЦИЯ -100%</div>
+                        <i class="fas fa-language fa-3x text-dark mb-3"></i>
+                        <h3 class="fw-bold">Татарский язык с нуля</h3>
+                        <p>Полный курс: алфавит, грамматика, разговорная практика с AI-репетитором</p>
+                        <div class="mt-2">
+                            <span class="old-price">10 000 ₽</span>
+                            <span class="new-price ms-3">Бесплатно</span>
+                        </div>
+                        {% if user.is_authenticated %}
+                            <a href="{% url 'course_detail' 'tatarskii-yazyk-s-nulya' %}" class="btn-primary-custom mt-3 w-100 text-center d-block">Начать обучение →</a>
+                        {% else %}
+                            <button class="btn-primary-custom mt-3 w-100" data-bs-toggle="modal" data-bs-target="#registerModal">Начать обучение →</button>
+                        {% endif %}
+                    </div>
                 </div>
-                <span class="text-dark me-2">
-                    <i class="fas fa-user me-1"></i>{{ user.username }}
-                </span>
-                <a href="{% url 'profile' %}" class="btn-outline-custom me-2">Профиль</a>
-                <a href="{% url 'logout' %}" class="btn-outline-custom">Выйти</a>
-            {% else %}
-                <a href="{% url 'login' %}" class="btn-outline-custom me-2 d-none d-sm-inline-block">Войти</a>
-                <a href="{% url 'register' %}" class="btn-primary-custom">Регистрация</a>
-            {% endif %}
+                <div class="col-lg-6">
+                    <div class="row g-3">
+                        <div class="col-12">
+                            <div class="card-glass p-4">
+                                <i class="fas fa-microphone-alt text-dark fa-2x mb-2"></i>
+                                <h5>Разговорный татарский</h5>
+                                <p>Практика устной речи</p>
+                                <span class="badge bg-secondary">Скоро</span>
+                            </div>
+                        </div>
+                        <div class="col-12">
+                            <div class="card-glass p-4">
+                                <i class="fas fa-pen-fancy text-dark fa-2x mb-2"></i>
+                                <h5>Татарская литература</h5>
+                                <p>Произведения классиков</p>
+                                <span class="badge bg-secondary">Скоро</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="text-center mt-5">
+                <a href="{% url 'all_courses' %}" class="btn-outline-custom">Все курсы →</a>
+            </div>
+        </section>
+
+        <!-- Сообщества (слайдер) -->
+        <div class="communities-section">
+            <div class="text-center mb-4">
+                <h2 class="section-title">🌿 Сообщества</h2>
+                <p class="section-subtitle">Листайте → присоединяйтесь к единомышленникам</p>
+            </div>
+            <div class="communities-wrapper">
+                <div class="swiper swiper-communities">
+                    <div class="swiper-wrapper">
+                        <div class="swiper-slide"><div class="community-card"><div class="community-icon"><i class="fas fa-utensils"></i></div><h5>Татарская кухня</h5><p>Рецепты, кулинарная лексика</p><span class="badge bg-dark text-white">450 уч.</span></div></div>
+                        <div class="swiper-slide"><div class="community-card"><div class="community-icon"><i class="fas fa-laptop-code"></i></div><h5>IT на татарском</h5><p>Программирование и технологии</p><span class="badge bg-dark text-white">890 уч.</span></div></div>
+                        <div class="swiper-slide"><div class="community-card"><div class="community-icon"><i class="fas fa-book-open"></i></div><h5>Поэзия и проза</h5><p>Тукай, поэты, литература</p><span class="badge bg-dark text-white">620 уч.</span></div></div>
+                        <div class="swiper-slide"><div class="community-card"><div class="community-icon"><i class="fas fa-mosque"></i></div><h5>Куда пойти в Казани</h5><p>Афиша, места, события</p><span class="badge bg-dark text-white">1.2k уч.</span></div></div>
+                        <div class="swiper-slide"><div class="community-card"><div class="community-icon"><i class="fas fa-water"></i></div><h5>Путешествия по РТ</h5><p>Болгар, Свияжск, туризм</p><span class="badge bg-dark text-white">780 уч.</span></div></div>
+                        <div class="swiper-slide"><div class="community-card"><div class="community-icon"><i class="fas fa-music"></i></div><h5>Татарская музыка</h5><p>Фольклор, современная музыка</p><span class="badge bg-dark text-white">540 уч.</span></div></div>
+                        <div class="swiper-slide"><div class="community-card"><div class="community-icon"><i class="fas fa-landmark"></i></div><h5>Экскурсии и культура</h5><p>История, музеи, традиции</p><span class="badge bg-dark text-white">430 уч.</span></div></div>
+                        <div class="swiper-slide"><div class="community-card"><div class="community-icon"><i class="fas fa-newspaper"></i></div><h5>Новости Казани</h5><p>События, анонсы, новости</p><span class="badge bg-dark text-white">2.1k уч.</span></div></div>
+                        <div class="swiper-slide"><div class="community-card"><div class="community-icon"><i class="fas fa-tree"></i></div><h5>Природа Татарстана</h5><p>Экотропы, заповедники</p><span class="badge bg-dark text-white">510 уч.</span></div></div>
+                        <div class="swiper-slide"><div class="community-card"><div class="community-icon"><i class="fas fa-museum"></i></div><h5>Музеи Казани</h5><p>Эрмитаж, выставки, искусство</p><span class="badge bg-dark text-white">380 уч.</span></div></div>
+                        <div class="swiper-slide"><div class="community-card"><div class="community-icon"><i class="fas fa-futbol"></i></div><h5>Спорт и активность</h5><p>Футбол, хоккей, активный отдых</p><span class="badge bg-dark text-white">620 уч.</span></div></div>
+                    </div>
+                </div>
+                <div class="swiper-button-prev-comm"><i class="fas fa-chevron-left"></i></div>
+                <div class="swiper-button-next-comm"><i class="fas fa-chevron-right"></i></div>
+            </div>
+            <div class="text-center mt-4">
+                <a href="{% url 'all_communities' %}" class="btn-outline-custom">Все сообщества →</a>
+            </div>
+        </div>
+
+        <!-- Кланы и достижения -->
+        <div class="clans-section">
+            <div class="row g-4">
+                <div class="col-lg-6">
+                    <h3 class="fw-bold text-dark mb-4"><i class="fas fa-trophy me-2"></i>Топ кланы</h3>
+                    <div class="clan-card d-flex justify-content-between align-items-center">
+                        <div><span class="clan-rank">🥇</span> <span class="fw-bold">Болгарлар</span></div>
+                        <div class="clan-score">364 634 ⭐</div>
+                    </div>
+                    <div class="clan-card d-flex justify-content-between align-items-center">
+                        <div><span class="clan-rank">🥈</span> <span class="fw-bold">Тукай мирасы</span></div>
+                        <div class="clan-score">56 346 ⭐</div>
+                    </div>
+                    <div class="clan-card d-flex justify-content-between align-items-center">
+                        <div><span class="clan-rank">🥉</span> <span class="fw-bold">IT-Татарлар</span></div>
+                        <div class="clan-score">546 546 ⭐</div>
+                    </div>
+                    <button class="btn-outline-custom w-100 mt-4" data-bs-toggle="modal" data-bs-target="#registerModal">➕ Создать свой клан</button>
+                </div>
+                <div class="col-lg-6">
+                    <h3 class="fw-bold text-dark mb-4"><i class="fas fa-medal me-2"></i>Достижения</h3>
+                    <div class="achievements-grid">
+                        <div class="achievement-item unlocked"><div class="achievement-icon"><i class="fas fa-book"></i></div><div class="achievement-name">Первый урок</div></div>
+                        <div class="achievement-item locked"><div class="achievement-icon"><i class="fas fa-comments"></i></div><div class="achievement-name">10 диалогов</div></div>
+                        <div class="achievement-item locked"><div class="achievement-icon"><i class="fas fa-trophy"></i></div><div class="achievement-name">Топ клана</div></div>
+                        <div class="achievement-item locked"><div class="achievement-icon"><i class="fas fa-microphone"></i></div><div class="achievement-name">Идеальное произношение</div></div>
+                        <div class="achievement-item locked"><div class="achievement-icon"><i class="fas fa-users"></i></div><div class="achievement-name">Лидер сообщества</div></div>
+                        <div class="achievement-item locked"><div class="achievement-icon"><i class="fas fa-calendar"></i></div><div class="achievement-name">30 дней подряд</div></div>
+                    </div>
+                    <p class="text-dark-50 small mt-3 text-center">Выполняйте уроки, чтобы открывать новые достижения</p>
+                </div>
+            </div>
         </div>
     </div>
-</nav>
 
-<!-- Модальное окно входа -->
+    <footer>
+        <div class="container-custom">
+            <div class="row">
+                <div class="col-md-4"><h5><i class="fas fa-crown me-2"></i>TatarSkill</h5><p class="small opacity-75">Образовательная экосистема для изучения татарского языка. AI-репетитор, сообщества, кланы и геймификация.</p></div>
+                <div class="col-md-2"><h6>Обучение</h6><ul class="list-unstyled small"><li><a href="{% url 'all_courses' %}">Курсы</a></li><li><a href="#">AI-репетитор</a></li></ul></div>
+                <div class="col-md-2"><h6>Сообщества</h6><ul class="list-unstyled small"><li><a href="{% url 'all_communities' %}">Все сообщества</a></li></ul></div>
+                <div class="col-md-4"><h6>Контакты</h6><p class="small">Казань, ул. Татарстан, 12<br>support@tatarskill.ru</p><div class="d-flex gap-3"><i class="fab fa-telegram"></i><i class="fab fa-vk"></i></div></div>
+            </div>
+            <hr class="opacity-25"><div class="text-center small opacity-50">© 2026 TatarSkill. Погрузитесь в мир татарского языка с AI и единомышленниками.</div>
+        </div>
+    </footer>
+</div>
+
+<!-- Модальные окна -->
 <div class="modal fade" id="loginModal" tabindex="-1">
     <div class="modal-dialog modal-dialog-centered">
         <div class="modal-content bg-white text-dark rounded-4">
@@ -748,16 +783,13 @@
                     <input type="text" name="username" class="form-control mb-3 bg-light border-success" placeholder="Имя пользователя" required>
                     <input type="password" name="password" class="form-control mb-3 bg-light border-success" placeholder="Пароль" required>
                     <button type="submit" class="btn-primary-custom w-100">Войти</button>
-                    <p class="text-center mt-3">
-                        Нет аккаунта? <a href="#" class="text-success" data-bs-toggle="modal" data-bs-target="#registerModal">Регистрация</a>
-                    </p>
+                    <p class="text-center mt-3">Нет аккаунта? <a href="#" class="text-success" data-bs-toggle="modal" data-bs-target="#registerModal">Регистрация</a></p>
                 </div>
             </form>
         </div>
     </div>
 </div>
 
-<!-- Модальное окно регистрации -->
 <div class="modal fade" id="registerModal" tabindex="-1">
     <div class="modal-dialog modal-dialog-centered">
         <div class="modal-content bg-white text-dark rounded-4">
@@ -779,169 +811,10 @@
     </div>
 </div>
 
-<section class="hero">
-    <div class="container-custom">
-        <div class="row">
-            <div class="col-lg-7">
-                <div class="hero-badge">✨ AI-репетитор говорит по-татарски</div>
-                <h1 class="hero-title">Учись <span class="gold-gradient">на родном языке</span><br>с интеллектуальным помощником 24/7</h1>
-                <p class="fs-5 hero-text mb-4">Искусственный интеллект помогает с произношением, создает персональные заметки, а сообщества и кланы открывают возможности для живого общения и совместного обучения.</p>
-                <div class="d-flex gap-4 mt-5 hero-text">
-                    {% if user.is_authenticated %}
-                        <a href="{% url 'education' %}" class="btn-primary-custom">Начать учиться</a>
-                    {% else %}
-                        <button class="btn-primary-custom" data-bs-toggle="modal" data-bs-target="#registerModal">Поступить</button>
-                    {% endif %}
-                </div>
-            </div>
-            <div class="col-lg-5 mt-5 mt-lg-0">
-                <div class="hero-image-wrapper">
-                    <img
-                        src="https://images.unsplash.com/photo-1522202176988-66273c2fd55f?q=80&amp;w=1400&amp;auto=format&amp;fit=crop"
-                        class="hero-image"
-                        alt="AI Learning"
-                    >
-
-                    <div class="hero-floating-card hero-card-1">
-                        <i class="fas fa-bolt"></i>
-                        AI powered
-                    </div>
-
-                    <div class="hero-floating-card hero-card-2">
-                        <i class="fas fa-language"></i>
-                        Татарча + AI
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-</section>
-
-<section id="courses" class="py-5">
-    <div class="container-custom">
-        <div class="text-center mb-5">
-            <h2 class="section-title">Наши курсы</h2>
-            <p class="section-subtitle fs-5">Начните изучение уже сегодня</p>
-        </div>
-        <div class="row g-4">
-            <div class="col-lg-6">
-                <div class="course-sale card-glass p-5 position-relative">
-                    <div class="sale-badge">🔥 АКЦИЯ -100%</div>
-                    <i class="fas fa-language fa-3x text-dark mb-3"></i>
-                    <h3 class="fw-bold text-dark">Татарский язык с нуля</h3>
-                    <p class="text-dark-50">Полный курс: алфавит, грамматика, разговорная практика с AI-репетитором</p>
-                    <div class="mt-3">
-                        <span class="old-price">10 000 ₽</span>
-                        <span class="new-price ms-3">Бесплатно</span>
-                    </div>
-                    {% if user.is_authenticated %}
-                        <a href="{% url 'course_detail' 'tatarskii-yazyk-s-nulya' %}" class="btn-primary-custom mt-4 w-100 text-center">Начать обучение →</a>
-                    {% else %}
-                        <button class="btn-primary-custom mt-4 w-100" data-bs-toggle="modal" data-bs-target="#registerModal">Начать обучение →</button>
-                    {% endif %}
-                </div>
-            </div>
-            <div class="col-lg-6">
-                <div class="row g-3">
-                    <div class="col-12"><div class="card-glass p-4"><i class="fas fa-microphone-alt text-dark fa-2x mb-2"></i><h5 class="fw-bold text-dark">Разговорный татарский</h5><p class="text-dark-50 small">Практика устной речи</p><span class="badge bg-dark text-white">Скоро</span></div></div>
-                    <div class="col-12"><div class="card-glass p-4"><i class="fas fa-pen-fancy text-dark fa-2x mb-2"></i><h5 class="fw-bold text-dark">Татарская литература</h5><p class="text-dark-50 small">Произведения классиков</p><span class="badge bg-dark text-white">Скоро</span></div></div>
-                </div>
-            </div>
-        </div>
-        <div class="text-center mt-5">
-            <a href="{% url 'all_courses' %}" class="btn-outline-custom">Все курсы →</a>
-        </div>
-    </div>
-</section>
-
-<div class="communities-section">
-    <div class="container-custom">
-        <div class="text-center mb-4">
-            <h2 class="section-title">🌿 Сообщества</h2>
-            <p class="section-subtitle">Листайте → присоединяйтесь к единомышленникам</p>
-        </div>
-    </div>
-    <div class="communities-wrapper">
-        <div class="swiper swiper-communities">
-            <div class="swiper-wrapper">
-                <div class="swiper-slide"><div class="community-card"><div class="community-icon"><i class="fas fa-utensils"></i></div><h5>Татарская кухня</h5><p>Рецепты, кулинарная лексика</p><span class="badge bg-dark text-white">450 уч.</span></div></div>
-                <div class="swiper-slide"><div class="community-card"><div class="community-icon"><i class="fas fa-laptop-code"></i></div><h5>IT на татарском</h5><p>Программирование и технологии</p><span class="badge bg-dark text-white">890 уч.</span></div></div>
-                <div class="swiper-slide"><div class="community-card"><div class="community-icon"><i class="fas fa-book-open"></i></div><h5>Поэзия и проза</h5><p>Тукай, поэты, литература</p><span class="badge bg-dark text-white">620 уч.</span></div></div>
-                <div class="swiper-slide"><div class="community-card"><div class="community-icon"><i class="fas fa-mosque"></i></div><h5>Куда пойти в Казани</h5><p>Афиша, места, события</p><span class="badge bg-dark text-white">1.2k уч.</span></div></div>
-                <div class="swiper-slide"><div class="community-card"><div class="community-icon"><i class="fas fa-water"></i></div><h5>Путешествия по РТ</h5><p>Болгар, Свияжск, туризм</p><span class="badge bg-dark text-white">780 уч.</span></div></div>
-                <div class="swiper-slide"><div class="community-card"><div class="community-icon"><i class="fas fa-music"></i></div><h5>Татарская музыка</h5><p>Фольклор, современная музыка</p><span class="badge bg-dark text-white">540 уч.</span></div></div>
-                <div class="swiper-slide"><div class="community-card"><div class="community-icon"><i class="fas fa-landmark"></i></div><h5>Экскурсии и культура</h5><p>История, музеи, традиции</p><span class="badge bg-dark text-white">430 уч.</span></div></div>
-                <div class="swiper-slide"><div class="community-card"><div class="community-icon"><i class="fas fa-newspaper"></i></div><h5>Новости Казани</h5><p>События, анонсы, новости</p><span class="badge bg-dark text-white">2.1k уч.</span></div></div>
-                <div class="swiper-slide"><div class="community-card"><div class="community-icon"><i class="fas fa-tree"></i></div><h5>Природа Татарстана</h5><p>Экотропы, заповедники</p><span class="badge bg-dark text-white">510 уч.</span></div></div>
-                <div class="swiper-slide"><div class="community-card"><div class="community-icon"><i class="fas fa-museum"></i></div><h5>Музеи Казани</h5><p>Эрмитаж, выставки, искусство</p><span class="badge bg-dark text-white">380 уч.</span></div></div>
-                <div class="swiper-slide"><div class="community-card"><div class="community-icon"><i class="fas fa-futbol"></i></div><h5>Спорт и активность</h5><p>Футбол, хоккей, активный отдых</p><span class="badge bg-dark text-white">620 уч.</span></div></div>
-            </div>
-        </div>
-        <div class="swiper-button-prev-comm"><i class="fas fa-chevron-left"></i></div>
-        <div class="swiper-button-next-comm"><i class="fas fa-chevron-right"></i></div>
-    </div>
-    <div class="text-center mt-5" style="margin-bottom: 20px;">
-        <a href="{% url 'all_communities' %}" class="btn-outline-custom">Все сообщества →</a>
-    </div>
-</div>
-
-<div class="container-custom">
-    <div class="clans-section">
-        <div class="row g-4">
-            <div class="col-lg-6">
-                <h3 class="fw-bold text-dark mb-4"><i class="fas fa-trophy me-2"></i>Топ кланы</h3>
-                <div class="clan-card d-flex justify-content-between align-items-center">
-                    <div><span class="clan-rank">🥇</span> <span class="fw-bold">Болгарлар</span></div>
-                    <div class="clan-score">364 634 ⭐</div>
-                </div>
-                <div class="clan-card d-flex justify-content-between align-items-center mt-3">
-                    <div><span class="clan-rank">🥈</span> <span class="fw-bold">Тукай мирасы</span></div>
-                    <div class="clan-score">56 346 ⭐</div>
-                </div>
-                <div class="clan-card d-flex justify-content-between align-items-center mt-3">
-                    <div><span class="clan-rank">🥉</span> <span class="fw-bold">IT-Татарлар</span></div>
-                    <div class="clan-score">546 546 ⭐</div>
-                </div>
-                <button class="btn-outline-custom w-100 mt-4" data-bs-toggle="modal" data-bs-target="#registerModal">➕ Создать свой клан</button>
-            </div>
-            <div class="col-lg-6">
-                <h3 class="fw-bold text-dark mb-4"><i class="fas fa-medal me-2"></i>Достижения</h3>
-                <div class="achievements-grid">
-                    <div class="achievement-item unlocked"><div class="achievement-icon"><i class="fas fa-book"></i></div><div class="achievement-name">Первый урок</div></div>
-                    <div class="achievement-item locked"><div class="achievement-icon"><i class="fas fa-comments"></i></div><div class="achievement-name">10 диалогов</div></div>
-                    <div class="achievement-item locked"><div class="achievement-icon"><i class="fas fa-trophy"></i></div><div class="achievement-name">Топ клана</div></div>
-                    <div class="achievement-item locked"><div class="achievement-icon"><i class="fas fa-microphone"></i></div><div class="achievement-name">Идеальное произношение</div></div>
-                    <div class="achievement-item locked"><div class="achievement-icon"><i class="fas fa-users"></i></div><div class="achievement-name">Лидер сообщества</div></div>
-                    <div class="achievement-item locked"><div class="achievement-icon"><i class="fas fa-calendar"></i></div><div class="achievement-name">30 дней подряд</div></div>
-                </div>
-                <p class="text-dark-50 small mt-3 text-center">Выполняйте уроки, чтобы открывать новые достижения</p>
-            </div>
-        </div>
-    </div>
-</div>
-
-<footer class="pt-5 pb-4">
-    <div class="container-custom">
-        <div class="row">
-            <div class="col-md-4"><h5 class="text-dark"><i class="fas fa-crown me-2"></i>TatarSkill</h5><p class="small opacity-75">Образовательная экосистема для изучения татарского языка. AI-репетитор, сообщества, кланы и геймификация.</p></div>
-            <div class="col-md-2"><h6 class="text-dark">Обучение</h6><ul class="list-unstyled small"><li><a href="{% url 'all_courses' %}" class="text-dark text-decoration-none opacity-75">Курсы</a></li><li><a href="#" class="text-dark text-decoration-none opacity-75">AI-репетитор</a></li></ul></div>
-            <div class="col-md-2"><h6 class="text-dark">Сообщества</h6><ul class="list-unstyled small"><li><a href="{% url 'all_communities' %}" class="text-dark text-decoration-none opacity-75">Все сообщества</a></li></ul></div>
-            <div class="col-md-4"><h6 class="text-dark">Контакты</h6><p class="small opacity-75">Казань, ул. Татарстан, 12<br>support@tatarskill.ru</p><div class="d-flex gap-3"><i class="fab fa-telegram opacity-75"></i><i class="fab fa-vk opacity-75"></i></div></div>
-        </div>
-        <hr class="opacity-25"><div class="text-center small opacity-50">© 2026 TatarSkill. Погрузитесь в мир татарского языка с AI и единомышленниками.</div>
-    </div>
-</footer>
-
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.js"></script>
 <script>
-    let conversationHistory = [
-        {
-            role: "system",
-            content: "Ты — дружелюбный ИИ-репетитор. Если пользователь пишет на татарском, отвечай на татарском. Если пользователь разговаривает с тобой на русском — отвечай на русском. Если пользователь пишет на русском значит разговаривай только на русском и никакого татарского. Используй приветствия на татарском: 'Исәнмесез!', 'Рәхим итегез!' и т.д. Не используй markdown, только обычный текст."
-        }
-    ];
-
+    // Инициализация Swiper для сообществ
     const communitiesSwiper = new Swiper('.swiper-communities', {
         slidesPerView: 'auto',
         spaceBetween: 20,
@@ -956,6 +829,7 @@
         }
     });
 
+    // Прокрутка для навбара
     const navbar = document.getElementById('navbar');
     window.addEventListener('scroll', () => {
         if (window.scrollY > 150) {
@@ -965,23 +839,48 @@
         }
     });
 
+    // Переключение языка (демо)
     const langRu = document.getElementById('langRu');
     const langTt = document.getElementById('langTt');
-
     langRu.addEventListener('click', () => {
         langRu.classList.add('active');
         langTt.classList.remove('active');
         console.log('Выбран русский язык');
     });
-
     langTt.addEventListener('click', () => {
         langTt.classList.add('active');
         langRu.classList.remove('active');
         console.log('Выбран татарский язык');
     });
 
+    // Управление размером дракона при скролле
+    const dragon = document.querySelector('.dragon-front');
+    const coursesSection = document.getElementById('courses');
+    if (coursesSection) {
+        const adjustDragonSize = () => {
+            const scrollY = window.scrollY;
+            const coursesTop = coursesSection.offsetTop;
+            // Если прокрутили ниже начала секции курсов (минус небольшой отступ)
+            if (scrollY + 100 > coursesTop) {
+                dragon.classList.add('small');
+            } else {
+                dragon.classList.remove('small');
+            }
+        };
+        window.addEventListener('scroll', adjustDragonSize);
+        adjustDragonSize(); // Вызов при загрузке
+    }
+
+    // AI чат — открывается/закрывается по клику на дракона справа
+    let conversationHistory = [
+        {
+            role: "system",
+            content: "Ты — дружелюбный ИИ-репетитор. Если пользователь пишет на татарском, отвечай на татарском. Если пользователь разговаривает с тобой на русском — отвечай на русском. Если пользователь пишет на русском значит разговаривай только на русском и никакого татарского. Используй приветствия на татарском: 'Исәнмесез!', 'Рәхим итегез!' и т.д. Не используй markdown, только обычный текст."
+        }
+    ];
+
     const chatPopup = document.getElementById('chatPopup');
-    const dinoBtn = document.getElementById('dinoBtn');
+    const dinoBtn = document.getElementById('dinoBtn');    // правый дракон
     const closeChat = document.getElementById('closeChat');
     const chatMessagesDiv = document.getElementById('chatMessages');
     const chatInput = document.getElementById('chatInput');
@@ -1085,8 +984,14 @@
     chatInput.addEventListener('keypress', (e) => {
         if (e.key === 'Enter') sendMessageToAI();
     });
+
+    // Открытие/закрытие чата по клику на дракона
     dinoBtn.addEventListener('click', () => {
-        chatPopup.style.display = 'flex';
+        if (chatPopup.style.display === 'flex') {
+            chatPopup.style.display = 'none';
+        } else {
+            chatPopup.style.display = 'flex';
+        }
     });
     closeChat.addEventListener('click', () => {
         chatPopup.style.display = 'none';
@@ -1098,7 +1003,7 @@
             if (!el.classList.contains('unlocked') && el.classList.contains('achievement-item')) {
                 alert('🔒 Выполните уроки, чтобы открыть это достижение!');
             } else {
-                if (! {% if user.is_authenticated %} true {% else %} false {% endif %} ) {
+                if (!{% if user.is_authenticated %}true{% else %}false{% endif %}) {
                     new bootstrap.Modal(document.getElementById('registerModal')).show();
                 } else {
                     alert('🌟 Функция скоро появится!');
